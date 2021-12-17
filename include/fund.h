@@ -1,7 +1,7 @@
 #ifndef BROKERAPP_FUND_H
 #define BROKERAPP_FUND_H
 
-#include "investment.h"
+#include "investments/investment.hpp"
 
 class Fund
 {

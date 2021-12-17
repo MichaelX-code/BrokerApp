@@ -1,25 +1,25 @@
 // Constructors:
 
 template<class T>
-List<T>::List()
+list<T>::list()
 {
     this->head = this->tail = nullptr;
     this->sz = 0;
 }
 
 template<class T>
-List<T>::List(const List<T>& other) :
-List()
+list<T>::list(const list<T>& other) :
+list()
 {
-    for (auto x : other)
-        this->push_back(x);
+    for (auto& x : other)
+        this->push_back(std::move(x));
 
     this->sz = other.size();
 }
 
 template<class T>
-List<T>::List(std::initializer_list<T> ilist) :
-List()
+list<T>::list(std::initializer_list<T> ilist) :
+list()
 {
     for (auto x : ilist)
         this->push_back(x);
@@ -30,7 +30,7 @@ List()
 // Destructors:
 
 template<class T>
-List<T>::~List()
+list<T>::~list()
 {
     while(this->head)
         this->pop_front();
@@ -40,9 +40,9 @@ List<T>::~List()
 
 template<class T>
 void
-List<T>::push_front(const T& x)
+list<T>::push_front(const T& x)
 {
-    Node<T>* new_element = new Node<T>;
+    node_t<T>* new_element = new node_t<T>;
     new_element->data = x;
     new_element->next = nullptr;
 
@@ -63,10 +63,12 @@ List<T>::push_front(const T& x)
 
 template<class T>
 void
-List<T>::push_back(const T& x)
+list<T>::push_back(const T& x)
 {
-    Node<T>* new_element = new Node<T>;
-    new_element->data = x;
+    node_t<T> * new_element = new node_t<T>;
+    // FIXME: remove const_cast
+    // (for now doesn't work with list<unique_ptr> without it)
+    new_element->data = std::move(const_cast<T&>(x));
     new_element->next = nullptr;
 
     if (this->empty())
@@ -87,9 +89,9 @@ List<T>::push_back(const T& x)
 template<typename T>
 template<typename... ARGS>
 void
-List<T>::emplace_front(ARGS&&... args)
+list<T>::emplace_front(ARGS&&... args)
 {
-    Node<T>* new_element = new Node<T>;
+    node_t<T>* new_element = new node_t<T>;
     new_element->data = std::move(T(std::forward<ARGS>(args)...));
     new_element->next = nullptr;
 
@@ -111,9 +113,9 @@ List<T>::emplace_front(ARGS&&... args)
 template<typename T>
 template<typename... ARGS>
 void
-List<T>::emplace_back(ARGS&&... args)
+list<T>::emplace_back(ARGS&&... args)
 {
-    Node<T>* new_element = new Node<T>;
+    node_t<T>* new_element = new node_t<T>;
     new_element->data = std::move(T(std::forward<ARGS>(args)...));
     new_element->next = nullptr;
 
@@ -134,23 +136,23 @@ List<T>::emplace_back(ARGS&&... args)
 
 template<class T>
 const T
-List<T>::pop_front()
+list<T>::pop_front()
 {
     T data;
     if (!this->head)
     {
         std::cerr << "ERROR: List is already empty!";
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (this->head == this->tail)
     {
-        data = this->head->data;
+        data = std::move(this->head->data);
         this->head = this->tail = nullptr;
     }
     else
     {
-        data = this->head->data;
+        data = std::move(this->head->data);
         this->head = this->head->next;
         this->head->prev = nullptr;
     }
@@ -161,13 +163,13 @@ List<T>::pop_front()
 
 template<class T>
 const T
-List<T>::pop_back()
+list<T>::pop_back()
 {
     T data;
     if (!this->head)
     {
         std::cerr << "ERROR: List is already empty!";
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     if (this->head == this->tail)
     {
@@ -187,9 +189,9 @@ List<T>::pop_back()
 
 template<class T>
 void
-List<T>::insert_after(List_iterator it, const T& x)
+list<T>::insert_after(List_iterator it, const T& x)
 {
-    Node<T>* new_element = new Node<T>;
+    node_t<T>* new_element = new node_t<T>;
     new_element->data = x;
     if (it == this->tail)
     {
@@ -209,8 +211,8 @@ List<T>::insert_after(List_iterator it, const T& x)
 }
 
 template<class T>
-typename List<T>::List_iterator
-List<T>::find(const T& x)
+typename list<T>::List_iterator
+list<T>::find(const T& x)
 const
 {
     for (auto it = this->begin(); it; ++it)
@@ -221,7 +223,7 @@ const
 
 template<class T>
 void
-List<T>::erase(List_iterator it)
+list<T>::erase(List_iterator it)
 {
     if (it == this->head && it == this->tail)
     {
@@ -249,7 +251,7 @@ List<T>::erase(List_iterator it)
 
 template<class T>
 void
-List<T>::clear()
+list<T>::clear()
 {
     while(this->head)
         this->pop_front();
@@ -260,7 +262,7 @@ List<T>::clear()
 
 template<class T>
 bool
-List<T>::empty()
+list<T>::empty()
 const noexcept
 {
     return (!this->head && !this->tail);
@@ -268,7 +270,7 @@ const noexcept
 
 template<class T>
 T&
-List<T>::front()
+list<T>::front()
 const noexcept
 {
     return this->head->data;
@@ -276,7 +278,7 @@ const noexcept
 
 template<class T>
 T&
-List<T>::back()
+list<T>::back()
 const noexcept
 {
     return this->tail->data;
@@ -284,39 +286,39 @@ const noexcept
 
 template<class T>
 const unsigned long long&
-List<T>::size()
+list<T>::size()
 const noexcept
 {
     return this->sz;
 }
 
 template<class T>
-typename List<T>::List_iterator
-List<T>::begin()
+typename list<T>::List_iterator
+list<T>::begin()
 const noexcept
 {
     return List_iterator(this->head);
 }
 
 template<class T>
-typename List<T>::List_iterator
-List<T>::end()
+typename list<T>::List_iterator
+list<T>::end()
 const noexcept
 {
     return List_iterator(this->tail->next);
 }
 
 template<class T>
-typename List<T>::List_reverse_iterator
-List<T>::rbegin()
+typename list<T>::List_reverse_iterator
+list<T>::rbegin()
 const noexcept
 {
     return List_reverse_iterator(this->tail);
 }
 
 template<class T>
-typename List<T>::List_reverse_iterator
-List<T>::rend()
+typename list<T>::List_reverse_iterator
+list<T>::rend()
 const noexcept
 {
     return List_reverse_iterator(this->head->prev);
@@ -325,19 +327,19 @@ const noexcept
 // Operators overloads:
 
 template<class T>
-List<T>&
-List<T>::operator = (const List<T>& other)
+list<T>&
+list<T>::operator = (const list<T>& other)
 {
     this->clear();
-    for (Node<T>* it = other.head; it; it = it->next)
+    for (node_t<T>* it = other.head; it; it = it->next)
         this->push_back(it->data);
     this->sz = other.size();
     return *this;
 }
 
 template<class T>
-List<T>&
-List<T>::operator = (std::initializer_list<T> ilist)
+list<T>&
+list<T>::operator = (std::initializer_list<T> ilist)
 {
     this->clear();
     for (auto x : ilist)
@@ -348,9 +350,9 @@ List<T>::operator = (std::initializer_list<T> ilist)
 
 template<class T>
 T&
-List<T>::operator [] (const int& index)
+list<T>::operator [] (const int& index)
 {
-    Node<T>* it = this->head;
+    node_t<T>* it = this->head;
     for (int i = 0; i < index; ++i)
         if (it->next)
         {
@@ -359,17 +361,17 @@ List<T>::operator [] (const int& index)
         else
         {
             std::cerr << "ERROR: Going out of the list!\n";
-            exit(1);
+            exit(EXIT_FAILURE);
         }
     return it->data;
 }
 
 template<class T>
 const T&
-List<T>::operator [] (const int& index)
+list<T>::operator [] (const int& index)
 const
 {
-    Node<T>* it = this->head;
+    node_t<T>* it = this->head;
     for (int i = 0; i < index; ++i)
         if (it->next)
         {
@@ -378,17 +380,17 @@ const
         else
         {
             std::cerr << "ERROR: Going out of the list!\n";
-            exit(1);
+            exit(EXIT_FAILURE);
         }
     return it->data;
 }
 
 template<class T>
 std::ostream&
-operator<<(std::ostream& os, const List<T>& li)
+operator<<(std::ostream& os, const list<T>& li)
 {
     os << '[';
-    for (Node<T>* it = li.head; it; it = it->next)
+    for (node_t<T>* it = li.head; it; it = it->next)
         os << it->data << (it->next ? ", " : "");
     os << ']';
     return os;
@@ -397,7 +399,7 @@ operator<<(std::ostream& os, const List<T>& li)
 // List_iterator constructors:
 
 template<class T>
-List<T>::List_iterator::List_iterator(Node<T>* p) :
+list<T>::List_iterator::List_iterator(node_t<T>* p) :
 ptr(p)
 {}
 
@@ -405,64 +407,64 @@ ptr(p)
 
 template<class T>
 T&
-List<T>::List_iterator::operator * ()
+list<T>::List_iterator::operator * ()
 const noexcept
 {
     return this->ptr->data;
 }
 
 template<class T>
-Node<T>*
-List<T>::List_iterator::operator -> ()
+node_t<T>*
+list<T>::List_iterator::operator -> ()
 const noexcept
 {
     return this->ptr;
 }
 
 template<class T>
-List<T>::List_iterator::operator bool ()
+list<T>::List_iterator::operator bool ()
 const
 {
     return this->ptr != nullptr;
 }
 
 template<class T>
-typename List<T>::List_iterator&
-List<T>::List_iterator::operator ++ ()
+typename list<T>::List_iterator&
+list<T>::List_iterator::operator ++ ()
 {
     this->ptr = this->ptr->next;
     return *this;
 }
 
 template<class T>
-typename List<T>::List_iterator
-List<T>::List_iterator::operator ++ (int)
+typename list<T>::List_iterator
+list<T>::List_iterator::operator ++ (int)
 {
-    Node<T>* tmp = ptr;
+    node_t<T>* tmp = ptr;
     ++(*this);
     return List_iterator(tmp);
 }
 
 template<class T>
-typename List<T>::List_iterator&
-List<T>::List_iterator::operator -- ()
+typename list<T>::List_iterator&
+list<T>::List_iterator::operator -- ()
 {
     this->ptr = this->ptr->prev;
     return *this;
 }
 
 template<class T>
-typename List<T>::List_iterator
-List<T>::List_iterator::operator -- (int)
+typename list<T>::List_iterator
+list<T>::List_iterator::operator -- (int)
 {
-    Node<T>* tmp = ptr;
+    node_t<T>* tmp = ptr;
     --(*this);
     return List_iterator(tmp);
 }
 
 template<class T>
 bool
-List<T>::List_iterator::operator == (const List_iterator& other)
+list<T>::List_iterator::operator == (const List_iterator& other)
 const noexcept
 {
     return this->ptr == other.ptr;
@@ -470,7 +472,7 @@ const noexcept
 
 template<class T>
 bool
-List<T>::List_iterator::operator != (const List_iterator& other)
+list<T>::List_iterator::operator != (const List_iterator& other)
 const noexcept
 {
     return this->ptr != other.ptr;
@@ -479,35 +481,35 @@ const noexcept
 // List_reverse_iterator operators overloads:
 
 template<class T>
-typename List<T>::List_reverse_iterator&
-List<T>::List_reverse_iterator::operator ++ ()
+typename list<T>::List_reverse_iterator&
+list<T>::List_reverse_iterator::operator ++ ()
 {
     this->ptr = this->ptr->prev;
     return *this;
 }
 
 template<class T>
-typename List<T>::List_reverse_iterator
-List<T>::List_reverse_iterator::operator ++ (int)
+typename list<T>::List_reverse_iterator
+list<T>::List_reverse_iterator::operator ++ (int)
 {
-    Node<T>* tmp = this->ptr;
+    node_t<T>* tmp = this->ptr;
     ++(*this);
     return List_iterator(tmp);
 }
 
 template<class T>
-typename List<T>::List_reverse_iterator&
-List<T>::List_reverse_iterator::operator -- ()
+typename list<T>::List_reverse_iterator&
+list<T>::List_reverse_iterator::operator -- ()
 {
     this->ptr = this->ptr->next;
     return *this;
 }
 
 template<class T>
-typename List<T>::List_reverse_iterator
-List<T>::List_reverse_iterator::operator -- (int)
+typename list<T>::List_reverse_iterator
+list<T>::List_reverse_iterator::operator -- (int)
 {
-    Node<T>* tmp = this->ptr;
+    node_t<T>* tmp = this->ptr;
     --(*this);
     return List_iterator(tmp);
 }

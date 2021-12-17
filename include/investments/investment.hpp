@@ -1,7 +1,7 @@
 #ifndef BROKERAPP_INVESTMENT_H
 #define BROKERAPP_INVESTMENT_H
 
-#include "utils/utils.h"
+#include "../utils/utils.h"
 
 class Investment
 {
@@ -10,7 +10,7 @@ public:
     Investment(std::string name, double profit, double risk);
 
     // Destructors:
-    // virtual ~Investment() = 0;
+    virtual ~Investment() = 0;
 
     // Functions: selectors (get)
     inv_id_t get_id() const noexcept;
@@ -29,9 +29,8 @@ protected:
     const std::string _name;
     const inv_id_t _id;
 
-private:
-    // Helpful private methods:
-    inv_id_t generate_id();
+    // Private functions:
+    virtual inv_id_t generate_id();
 };
 
 #endif // BROKERAPP_INVESTMENT_H

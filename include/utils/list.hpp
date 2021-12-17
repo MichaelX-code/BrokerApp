@@ -5,24 +5,24 @@
 #include <iterator>
 
 template<class T>
-struct Node {
+struct node_t {
     T data;
-    Node<T> * next;
-    Node<T> * prev;
+    node_t<T> * next;
+    node_t<T> * prev;
 };
 
 template<class T>
-class List {
+class list {
 private:
     class List_iterator;
     class List_reverse_iterator;
 public:
     // Constructors:
-    List();
-    List(const List& other);
-    List(std::initializer_list<T> ilist);
+    list();
+    list(const list& other);
+    list(std::initializer_list<T> ilist);
     // Destructors:
-    ~List();
+    ~list();
 
     // Functions: selectors (get)
     bool empty() const noexcept;
@@ -51,29 +51,29 @@ public:
     void emplace_back(ARGS&&... args);
 
     // Operators overloads:
-    List& operator = (const List& other);
-    List& operator = (std::initializer_list<T> ilist);
+    list& operator = (const list& other);
+    list& operator = (std::initializer_list<T> ilist);
     T& operator [] (const int& index);
     const T& operator [] (const int& index) const;
 
     template<class U>
-    friend std::ostream& operator << (std::ostream& os, const List<U>& li);
+    friend std::ostream& operator << (std::ostream& os, const list<U>& li);
 
 private:
-    Node<T> * head;
-    Node<T> * tail;
+    node_t<T> * head;
+    node_t<T> * tail;
     unsigned long long sz;
 
     // Iterators:
     class List_iterator {
     private:
-        friend class List;
+        friend class list;
     public:
         // Constructors:
-        List_iterator(Node<T> * p = nullptr);
+        List_iterator(node_t<T> * p = nullptr);
 
         T& operator * () const noexcept;
-        Node<T> * operator -> () const noexcept;
+        node_t<T> * operator -> () const noexcept;
         operator bool () const;
 
         List_iterator& operator ++ ();
@@ -85,7 +85,7 @@ private:
         bool operator != (const List_iterator& other) const noexcept;
     
     protected:
-        Node<T>* ptr;
+        node_t<T>* ptr;
     };
 
     class List_reverse_iterator : public List_iterator {

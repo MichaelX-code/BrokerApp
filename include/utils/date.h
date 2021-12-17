@@ -3,11 +3,12 @@
 
 #include "utils.h"
 
-class Date
+class date_t
 {
 public:
     // Constructors:
-    Date(std::string date);
+    date_t();
+    date_t(std::string date);
 
     // Functions: selectors (get)
     unsigned get_day() const noexcept;
@@ -21,12 +22,12 @@ public:
     void set_year(unsigned year);
 
     // Operators overloads:
-    friend bool operator < (const Date &a, const Date &b);
-    friend bool operator > (const Date &a, const Date &b);
-    friend bool operator <= (const Date &a, const Date &b);
-    friend bool operator >= (const Date &a, const Date &b);
-    friend bool operator == (const Date &a, const Date &b);
-    friend bool operator != (const Date &a, const Date &b);
+    friend bool operator < (const date_t &a, const date_t &b);
+    friend bool operator > (const date_t &a, const date_t &b);
+    friend bool operator <= (const date_t &a, const date_t &b);
+    friend bool operator >= (const date_t &a, const date_t &b);
+    friend bool operator == (const date_t &a, const date_t &b);
+    friend bool operator != (const date_t &a, const date_t &b);
 
 private:
     // Members:

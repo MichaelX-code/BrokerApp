@@ -5,11 +5,16 @@
 #include <typeinfo>
 #include <typeindex>
 #include <string>
+#include <vector>
 #include <unordered_map>
 #include <cxxabi.h>
+#include <ctime>
+#include <fstream>
+#include <sstream>
 
 #include "date.h"
 #include "list.hpp"
+#include "csv_parser.h"
 
 typedef unsigned long inv_id_t;
 

@@ -1,4 +1,6 @@
-#include "investment.h"
+#include "investment.hpp"
+
+// Constructors:
 
 Investment::Investment(std::string name, double profit, double risk) :
 _name(name), _profit(profit), _risk(risk), _id(generate_id())
@@ -14,6 +16,11 @@ _name(name), _profit(profit), _risk(risk), _id(generate_id())
                   << ". Investment profit has to be >= 0\n";
     }
 }
+
+// Destructors:
+
+Investment::~Investment()
+{}
 
 inv_id_t
 Investment::get_id()
@@ -68,13 +75,5 @@ Investment::set_profit(double profit)
 inv_id_t
 Investment::generate_id()
 {
-    static std::unordered_map<std::string, inv_id_t> inv_types = {
-        { "Currency*",   1e3 },
-        { "Metal*",      2e3 },
-        { "Obligation*", 3e3 },
-        { "Stock*",      4e3 },
-        { "Investment*", 9e3 },
-    };
-
-    return inv_types[demangle(typeid(this).name())] + iota();
+    return 9e3 + iota();
 }

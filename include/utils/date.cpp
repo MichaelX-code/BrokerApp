@@ -1,7 +1,22 @@
 #include "date.h"
 
+// Default constructor sets current date (local)
+date_t::date_t()
+{
+    std::time_t cur_time = std::time(0);
+    std::tm* local_time = std::localtime(&cur_time);
+
+    this->_day = local_time->tm_mday;
+    this->_month = local_time->tm_mon + 1;
+    this->_year = local_time->tm_year + 1900;
+
+    // if date is not correct, throw an error
+    if (!_check_valid())
+        throw std::invalid_argument("ERROR: Impossible date");
+}
+
 // Construct out of string "dd?mm?yyyy"
-Date::Date(std::string date)
+date_t::date_t(std::string date)
 {
     if (date.length() != 10)
         throw std::invalid_argument("ERROR: Wrong date format");
@@ -16,28 +31,28 @@ Date::Date(std::string date)
 }
 
 unsigned
-Date::get_day()
+date_t::get_day()
 const noexcept
 {
    return this->_day;
 }
 
 unsigned
-Date::get_month()
+date_t::get_month()
 const noexcept
 {
     return this->_month;
 }
 
 unsigned
-Date::get_year()
+date_t::get_year()
 const noexcept
 {
     return this->_year;
 }
 
 std::string
-Date::get_formated()
+date_t::get_formated()
 const
 {
     std::string day = (this->_day < 10 ? "0" : "");
@@ -50,7 +65,7 @@ const
 }
 
 void
-Date::set_day(unsigned day)
+date_t::set_day(unsigned day)
 {
     if (day <= _end_of_month(_month, _year) && day != 0)
         this->_day = day;
@@ -59,7 +74,7 @@ Date::set_day(unsigned day)
 }
 
 void
-Date::set_month(unsigned month)
+date_t::set_month(unsigned month)
 {
     if (_day <= _end_of_month(month, _year))
         this->_month = month;
@@ -68,7 +83,7 @@ Date::set_month(unsigned month)
 }
 
 void
-Date::set_year(unsigned year)
+date_t::set_year(unsigned year)
 {
     if (_day <= _end_of_month(_month, year))
         this->_year = year;
@@ -77,7 +92,7 @@ Date::set_year(unsigned year)
 }
 
 bool
-operator < (const Date &a, const Date &b)
+operator < (const date_t &a, const date_t &b)
 {
     return (a._year < b._year ||
             a._year == b._year && a._month < b._month ||
@@ -85,43 +100,43 @@ operator < (const Date &a, const Date &b)
 }
 
 bool
-operator > (const Date &a, const Date &b)
+operator > (const date_t &a, const date_t &b)
 {
     return (b < a);
 }
 
 bool
-operator <= (const Date &a, const Date &b)
+operator <= (const date_t &a, const date_t &b)
 {
     return !(a > b);
 }
 
 bool
-operator >= (const Date &a, const Date &b)
+operator >= (const date_t &a, const date_t &b)
 {
     return !(a < b);
 }
 
 bool
-operator == (const Date &a, const Date &b)
+operator == (const date_t &a, const date_t &b)
 {
     return (a._year == b._year && a._month == b._month && a._day == b._day);
 }
 
 bool
-operator != (const Date &a, const Date &b)
+operator != (const date_t &a, const date_t &b)
 {
     return !(a == b);
 }
 
 inline bool
-Date::_check_valid()
+date_t::_check_valid()
 {
     return (_month <= 12 && _day <= _end_of_month(_month, _year));
 }
 
 inline unsigned
-Date::_end_of_month(unsigned int month, unsigned int year)
+date_t::_end_of_month(unsigned int month, unsigned int year)
 {
     switch (month) {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31;
@@ -132,7 +147,7 @@ Date::_end_of_month(unsigned int month, unsigned int year)
 }
 
 inline bool
-Date::_is_leap(unsigned int year)
+date_t::_is_leap(unsigned int year)
 {
     return ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
 }

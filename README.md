@@ -26,3 +26,48 @@
 - `CMakeLists.txt`
 
 > `.class` stands for class implementation in 2 files: `.h` or `.hpp` and `.cpp`
+
+### OOP structure
+
+Investments classes:
+
+    - Investment      (abstract)
+      - Stock         (inherited from Investment)
+      - Obligation    (inherited from Investment)
+      - Metal         (inherited from Investment)
+      - Currency      (inherited from Investment)
+
+Game classes:
+
+    - Game
+    - Market
+    - Fund
+
+Utility classes:
+
+    - list            (template)
+    - date_t
+    - csv_parser_t
+
+## Build instructions
+
+### Windows Visual Studio
+
+1. Open project folder in `Visual Studio`;
+1. Set up *CMake* project: *Project > Configure BrokerApp*;
+1. Open `main.cpp` file;
+1. Build using run button.
+
+### Linux & MacOS
+
+1. If you don't have *CMake*, install it using your package manager;
+1. Open project folder in terminal and build using commands:
+
+    ```bash
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ```
+
+1. Run using `./BrokerApp` in `build` folder.

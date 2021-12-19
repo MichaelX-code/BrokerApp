@@ -32,10 +32,10 @@ public:
     T& back()                           const noexcept;
     const unsigned long long& size()    const noexcept;
 
-    List_iterator begin()               const noexcept;
-    List_iterator end()                 const noexcept;
-    List_reverse_iterator rbegin()      const noexcept;
-    List_reverse_iterator rend()        const noexcept;
+    List_iterator begin()               const;
+    List_iterator end()                 const;
+    List_reverse_iterator rbegin()      const;
+    List_reverse_iterator rend()        const;
 
     // Methods:
     void push_front(const T& x);

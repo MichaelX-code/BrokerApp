@@ -9,7 +9,7 @@ class BrokerGame
 {
 public:
     // Constructor:
-    BrokerGame();
+    BrokerGame(size_t game_end = 12);
 
     // Destructor:
     ~BrokerGame();
@@ -20,10 +20,19 @@ public:
     date_t get_date()              const;
 
     // Methods:
-    void step();
+    bool step();
+    void interface()               const;
 private:
     Market * _market;
     Fund   * _fund;
+    size_t _game_duration;
+    size_t _game_end;
+
+    // Private functions:
+    void _draw_available()          const;
+    void _draw_owned()              const;
+
+    void handle_command(std::string command);
 };
 
 #endif // BROKERAPP_BROKER_GAME_H

@@ -6,10 +6,9 @@ main(void)
 {
     BrokerGame game {};
 
-    for (int i = 0; i < 50; ++i)
+    while(game.step())
     {
-        std::cout << game.get_market()->get_available()[0]->get_price() << '\n';
-        game.step();
+        game.interface();
     }
 
     return (EXIT_SUCCESS);

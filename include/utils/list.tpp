@@ -293,7 +293,7 @@ const noexcept
 template<class T>
 typename list<T>::List_iterator
 list<T>::begin()
-const noexcept
+const
 {
     return List_iterator(this->head);
 }
@@ -301,15 +301,15 @@ const noexcept
 template<class T>
 typename list<T>::List_iterator
 list<T>::end()
-const noexcept
+const
 {
-    return List_iterator(this->tail->next);
+    return List_iterator(nullptr);
 }
 
 template<class T>
 typename list<T>::List_reverse_iterator
 list<T>::rbegin()
-const noexcept
+const
 {
     return List_reverse_iterator(this->tail);
 }
@@ -317,7 +317,7 @@ const noexcept
 template<class T>
 typename list<T>::List_reverse_iterator
 list<T>::rend()
-const noexcept
+const
 {
     return List_reverse_iterator(this->head->prev);
 }

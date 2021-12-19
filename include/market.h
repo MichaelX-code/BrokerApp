@@ -31,6 +31,8 @@ private:
     void _clean_expired();
 };
 
+std::string get_inv_type(const investment_ptr_t& investment_ptr);
 std::string get_csv_style_info(const investment_ptr_t& investment_ptr);
+std::string get_table_style_info(const investment_ptr_t& investment_ptr);
 
 #endif // BROKERAPP_MARKET_H

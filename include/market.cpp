@@ -147,9 +147,31 @@ Market::step()
 }
 
 std::string
+get_inv_type(const investment_ptr_t& investment_ptr)
+{
+    std::string _inv_type;
+
+    stock_ptr_t         stock(nullptr);
+    obligation_ptr_t    obl(nullptr);
+    metal_ptr_t         metal(nullptr);
+    currency_ptr_t      cur(nullptr);
+
+    if ((stock = std::dynamic_pointer_cast<Stock>(investment_ptr)))
+        _inv_type = "Stock";
+    else if ((obl = std::dynamic_pointer_cast<Obligation>(investment_ptr)))
+        _inv_type = "Obligation";
+    else if ((metal = std::dynamic_pointer_cast<Metal>(investment_ptr)))
+        _inv_type = "Metal";
+    else if ((cur = std::dynamic_pointer_cast<Currency>(investment_ptr)))
+        _inv_type = "Currency";
+
+    return _inv_type;
+}
+
+std::string
 get_csv_style_info(const investment_ptr_t& investment_ptr)
 {
-    std::stringstream info_stream;    
+    std::stringstream info_stream;
     info_stream << ',' << investment_ptr->get_name()
                 << ',' << investment_ptr->get_price()
                 << ',' << investment_ptr->get_profit()
@@ -173,4 +195,24 @@ get_csv_style_info(const investment_ptr_t& investment_ptr)
         csv_style_info = "Currency" + csv_style_info;
 
     return csv_style_info;
+}
+
+std::string
+get_table_style_info(const investment_ptr_t& investment_ptr)
+{
+    std::string inv_type = get_inv_type(investment_ptr);
+
+    std::string name = investment_ptr->get_name();
+    if (name.size() > 17)
+        name = name.substr(0, 14) + "...";
+
+    std::stringstream table_row_buffer;
+    table_row_buffer << std::left << ' '
+                     << std::setw(10) << inv_type                     << " | "
+                     << std::setw(17) << name                         << " | "
+                     << std::setw(7)  << investment_ptr->get_price()  << " | "
+                     << std::setw(10) << investment_ptr->get_profit() << " | "
+                     << std::setw(4)  << investment_ptr->get_risk()   << '\n';
+
+    return table_row_buffer.str();
 }

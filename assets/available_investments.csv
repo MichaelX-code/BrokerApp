@@ -1,3 +1,5 @@
+# Cyrillic is not fully supported!
+
 # All inputs are formated like so:
 # type,name,price,profit,risk,exiry_date
 
@@ -7,9 +9,10 @@ Stock,Alphabet,2867.5,1.04,0.05
 Stock,Kodak,5.16,1.1,0.15
 
 # Obligations:
-Obligation,АФК Система выпуск 15,1028,1.1,0.02,01.11.2024
-Obligation,АФК Система выпуск 16,1028,1.1,0.02,01.02.2025
-Obligation,АФК Система выпуск 17,1028,1.1,0.02,01.06.2025
+Obligation,VK publication 1,1028,1.1,0.02,01.11.2024
+Obligation,VK publication 2,1028,1.1,0.02,01.02.2025
+Obligation,Gazprom,1028,1.1,0.02,01.06.2025
+Obligation,GDLK,71961,1.1,0.01,01.06.2027
 
 # Metals:
 Metal,Gold,455.57,1.02,0.01

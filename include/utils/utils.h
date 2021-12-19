@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <random>
+#include <iomanip>
 
 #include "date.h"
 #include "list.hpp"
@@ -19,5 +20,9 @@
 typedef unsigned long inv_id_t;
 
 inv_id_t iota();
+
+void clear_terminal();
+
+std::string table_header();
 
 #endif // BROKERAPP_UTILS_H

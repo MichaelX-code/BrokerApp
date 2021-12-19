@@ -1,6 +1,7 @@
 #include "fund.h"
 
-Fund::Fund()
+Fund::Fund() :
+_budget(100000)
 {}
 
 const investments_list_t&

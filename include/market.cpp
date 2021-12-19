@@ -198,20 +198,24 @@ get_csv_style_info(const investment_ptr_t& investment_ptr)
 }
 
 std::string
-get_table_style_info(const investment_ptr_t& investment_ptr)
+get_table_style_info(const investment_ptr_t& investment_ptr, int n)
 {
     std::string inv_type = get_inv_type(investment_ptr);
 
     std::string name = investment_ptr->get_name();
-    if (name.size() > 17)
-        name = name.substr(0, 14) + "...";
+    if (name.size() > 12)
+        name = name.substr(0, 9) + "...";
 
     std::stringstream table_row_buffer;
-    table_row_buffer << std::left << ' '
-                     << std::setw(10) << inv_type                     << " | "
-                     << std::setw(17) << name                         << " | "
-                     << std::setw(7)  << investment_ptr->get_price()  << " | "
-                     << std::setw(10) << investment_ptr->get_profit() << " | "
+    table_row_buffer << std::left;
+
+    if (n > 0)
+        table_row_buffer << std::setw(2) << n << '|';
+
+    table_row_buffer << std::setw(10) << inv_type                     << '|'
+                     << std::setw(12) << name                         << '|'
+                     << std::setw(7)  << investment_ptr->get_price()  << '|'
+                     << std::setw(6)  << investment_ptr->get_profit() << '|'
                      << std::setw(4)  << investment_ptr->get_risk()   << '\n';
 
     return table_row_buffer.str();

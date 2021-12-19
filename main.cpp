@@ -6,6 +6,8 @@ main(void)
 {
     BrokerGame game {};
 
+    game.get_fund()->buy(game.get_market()->get_available()[0]);
+
     while(game.step())
     {
         game.interface();

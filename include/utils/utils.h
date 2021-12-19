@@ -12,6 +12,14 @@
 #include <sstream>
 #include <random>
 #include <iomanip>
+#include <stdio.h>
+
+#ifdef _WIN32
+    #include <Windows.h>
+#else
+    #include <sys/ioctl.h>
+    #include <unistd.h>
+#endif
 
 #include "date.h"
 #include "list.hpp"
@@ -24,5 +32,9 @@ inv_id_t iota();
 void clear_terminal();
 
 std::string table_header();
+
+void set_cursor_pos(int x, int y);
+
+std::pair<int, int> get_term_size();
 
 #endif // BROKERAPP_UTILS_H

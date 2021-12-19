@@ -15,22 +15,23 @@ public:
     ~BrokerGame();
 
     // Functions: selectors (get)
-    const Market * get_market()    const noexcept;
-    const Fund   * get_fund()      const noexcept;
+    Market * get_market();
+    Fund   * get_fund();
     date_t get_date()              const;
 
     // Methods:
     bool step();
-    void interface()               const;
+    void interface();
 private:
     Market * _market;
     Fund   * _fund;
     size_t _game_duration;
     size_t _game_end;
+    int cursor_row = 0;
 
     // Private functions:
-    void _draw_available()          const;
-    void _draw_owned()              const;
+    void _draw_available();
+    void _draw_owned();
 
     void handle_command(std::string command);
 };

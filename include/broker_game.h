@@ -21,7 +21,7 @@ public:
 
     // Methods:
     bool step();
-    void interface();
+    void draw_interface();
 private:
     Market * _market;
     Fund   * _fund;

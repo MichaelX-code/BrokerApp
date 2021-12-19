@@ -10,7 +10,7 @@ main(void)
 
     while(game.step())
     {
-        game.interface();
+        game.draw_interface();
     }
 
     return (EXIT_SUCCESS);

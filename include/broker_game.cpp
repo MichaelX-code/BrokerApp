@@ -125,7 +125,7 @@ BrokerGame::_draw_owned()
 }
 
 void
-BrokerGame::interface()
+BrokerGame::draw_interface()
 {
     clear_terminal();
     _draw_available();

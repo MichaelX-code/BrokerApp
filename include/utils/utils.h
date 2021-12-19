@@ -6,6 +6,7 @@
 #include <typeindex>
 #include <string>
 #include <vector>
+#include <map>
 #include <unordered_map>
 #include <ctime>
 #include <fstream>
@@ -27,6 +28,11 @@
 
 typedef unsigned long inv_id_t;
 
+enum game_status_t {
+    PLAYING,
+    ENDED,
+};
+
 inv_id_t iota();
 
 void clear_terminal();
@@ -36,5 +42,10 @@ std::string table_header();
 void set_cursor_pos(int x, int y);
 
 std::pair<int, int> get_term_size();
+
+std::vector<std::string> parse_into_words(std::string s);
+
+void set_tem_color_red();
+void set_tem_color_default();
 
 #endif // BROKERAPP_UTILS_H

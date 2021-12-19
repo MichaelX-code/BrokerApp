@@ -41,4 +41,6 @@ protected:
 typedef std::shared_ptr<Investment> investment_ptr_t;
 typedef list<investment_ptr_t> investments_list_t;
 
+investment_ptr_t find_by_id(investments_list_t invs, inv_id_t id);
+
 #endif // BROKERAPP_INVESTMENTS_INVESTMENT_H

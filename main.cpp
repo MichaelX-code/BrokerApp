@@ -8,9 +8,10 @@ main(void)
 
     game.get_fund()->buy(game.get_market()->get_available()[0]);
 
-    while(game.step())
+    while(game)
     {
         game.draw_interface();
+        game.get_command();
     }
 
     return (EXIT_SUCCESS);

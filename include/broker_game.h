@@ -20,20 +20,26 @@ public:
     date_t get_date()              const;
 
     // Methods:
-    bool step();
+    void step();
     void draw_interface();
+    void get_command();
+
+    // Operators overloads:
+    operator bool () const;
 private:
     Market * _market;
     Fund   * _fund;
     size_t _game_duration;
     size_t _game_end;
-    int cursor_row = 0;
+    int _cursor_row = 0;
+    game_status_t _status;
 
     // Private functions:
     void _draw_available();
     void _draw_owned();
-
-    void handle_command(std::string command);
+    void _draw_stats();
+    void _draw_help();
+    void _draw_console();
 };
 
 #endif // BROKERAPP_BROKER_GAME_H

@@ -104,3 +104,12 @@ Investment::operator != (const Investment& other)
 {
     return !(*this == other);
 }
+
+investment_ptr_t
+find_by_id(investments_list_t invs, inv_id_t id)
+{
+    for (auto& inv : invs)
+        if (inv->get_id() == id)
+            return inv;
+    return nullptr;
+}

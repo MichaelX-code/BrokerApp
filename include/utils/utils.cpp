@@ -58,3 +58,40 @@ get_term_size()
     return std::make_pair(max.ws_col, max.ws_row);
 #endif
 }
+
+std::vector<std::string>
+parse_into_words(std::string s)
+{
+    std::stringstream stream(s);
+    std::string word;
+    std::vector<std::string> words;
+    while (!stream.eof())
+    {
+        stream >> word;
+        words.push_back(word);
+    }
+
+    return words;
+}
+
+void
+set_tem_color_default()
+{
+#ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+#else
+    std::cout << "\033[0m";
+#endif
+}
+
+void
+set_tem_color_red()
+{
+#ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_DEFAULT);
+#else
+    std::cout << "\033[31m";
+#endif
+}

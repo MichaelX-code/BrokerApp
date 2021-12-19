@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <cxxabi.h>
 #include <ctime>
 #include <fstream>
 #include <sstream>
@@ -20,7 +19,5 @@
 typedef unsigned long inv_id_t;
 
 inv_id_t iota();
-
-[[maybe_unused]] std::string demangle(const char* name);
 
 #endif // BROKERAPP_UTILS_H

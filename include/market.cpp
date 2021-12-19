@@ -4,7 +4,12 @@
 
 Market::Market()
 {
-    csv_parser_t csv_parser("../assets/available_investments.csv");
+#ifdef _WIN32
+    std::string file_path = "..\\..\\..\\assets\\available_investments.csv";
+#else
+    std::string file_path = "../assets/available_investments.csv";
+#endif
+    csv_parser_t csv_parser(file_path);
 
     while (!csv_parser.empty())
     {
@@ -132,7 +137,7 @@ Market::_clean_expired()
         if ((obl = std::dynamic_pointer_cast<Obligation>(*it)) &&
             obl->get_expiry_date() <= _cur_date)
         {
-            _available.erase(it);
+            _available.erase(it++);
         }
     }
 }

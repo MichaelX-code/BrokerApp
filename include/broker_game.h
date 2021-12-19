@@ -11,16 +11,19 @@ public:
     // Constructor:
     BrokerGame();
 
+    // Destructor:
+    ~BrokerGame();
+
     // Functions: selectors (get)
-    const Market& get_market()      const noexcept;
-    const Fund& get_fund()          const noexcept;
-    date_t get_date()               const;
+    const Market * get_market()    const noexcept;
+    const Fund   * get_fund()      const noexcept;
+    date_t get_date()              const;
 
     // Methods:
     void step();
 private:
-    Market _market;
-    Fund   _fund;
+    Market * _market;
+    Fund   * _fund;
 };
 
 #endif // BROKERAPP_BROKER_GAME_H

@@ -12,7 +12,7 @@ list<T>::list(const list<T>& other) :
 list()
 {
     for (auto& x : other)
-        this->push_back(std::move(x));
+        this->push_back(x);
 
     this->sz = other.size();
 }
@@ -134,56 +134,55 @@ list<T>::emplace_back(ARGS&&... args)
 }
 
 template<class T>
-const T
+void
 list<T>::pop_front()
 {
-    T data;
     if (!this->head)
     {
         std::cerr << "ERROR: List is already empty!";
         exit(EXIT_FAILURE);
     }
 
+    node_t<T> * temp = this->head;
+
     if (this->head == this->tail)
     {
-        data = std::move(this->head->data);
         this->head = this->tail = nullptr;
     }
     else
     {
-        data = std::move(this->head->data);
         this->head = this->head->next;
         this->head->prev = nullptr;
     }
     
     --sz;
-    return data;
+    delete temp;
 }
 
 template<class T>
-const T
+void
 list<T>::pop_back()
 {
-    T data;
     if (!this->head)
     {
         std::cerr << "ERROR: List is already empty!";
         exit(EXIT_FAILURE);
     }
+
+    node_t<T> * temp = this->head;
+
     if (this->head == this->tail)
     {
-        data = this->head->data;
         this->head = this->tail = nullptr;
     }
     else
     {
-        data = this->head->data;
         this->tail = this->tail->prev;
         this->tail->next = nullptr;
     }
     
     --sz;
-    return data;
+    delete temp;
 }
 
 template<class T>

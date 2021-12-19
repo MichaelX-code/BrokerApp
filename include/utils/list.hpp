@@ -40,8 +40,8 @@ public:
     // Methods:
     void push_front(const T& x);
     void push_back(const T& x);
-    const T pop_front();
-    const T pop_back();
+    void pop_front();
+    void pop_back();
     void insert_after(List_iterator it, const T& x);
     List_iterator find(const T& x) const;
     void erase(List_iterator it);

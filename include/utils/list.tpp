@@ -66,9 +66,8 @@ void
 list<T>::push_back(const T& x)
 {
     node_t<T> * new_element = new node_t<T>;
-    // FIXME: remove const_cast
-    // (for now doesn't work with list<unique_ptr> without it)
-    new_element->data = std::move(const_cast<T&>(x));
+    // FIXME: for now doesn't work with list< unique_ptr<...> >
+    new_element->data = x;
     new_element->next = nullptr;
 
     if (this->empty())

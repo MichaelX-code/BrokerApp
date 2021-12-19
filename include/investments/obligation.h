@@ -1,5 +1,5 @@
-#ifndef BROKERAPP_OBLIGATION_H
-#define BROKERAPP_OBLIGATION_H
+#ifndef BROKERAPP_INVESTMENTS_OBLIGATION_H
+#define BROKERAPP_INVESTMENTS_OBLIGATION_H
 
 #include "../utils/utils.h"
 #include "investment.hpp"
@@ -8,11 +8,14 @@ class Obligation : public Investment
 {
 public:
     // Constructors:
-    Obligation(std::string name, double profit, double risk,
+    Obligation(std::string name, double price, double profit, double risk,
                date_t expiry_date);
+
+    // Functions: selectors (get)
+    date_t get_expiry_date() const;
 private:
     // Members:
     date_t _expiry_date;
 };
 
-#endif // BROKERAPP_OBLIGATION_H
+#endif // BROKERAPP_INVESTMENTS_OBLIGATION_H

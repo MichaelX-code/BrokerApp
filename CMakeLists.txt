@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.20)
 project(BrokerApp)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS -Wall)
 set(SOURCE_FILES
     include/investments/investment.cpp
     include/investments/stock.cpp
     include/investments/obligation.cpp
     include/investments/metal.cpp
+    include/investments/currency.cpp
     include/fund.cpp
     include/market.cpp
     include/utils/utils.cpp

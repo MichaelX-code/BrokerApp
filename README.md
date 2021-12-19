@@ -25,7 +25,4 @@
 - `README.md`
 - `CMakeLists.txt`
 
-### OOP structure
-
 > `.class` stands for class implementation in 2 files: `.h` or `.hpp` and `.cpp`
-

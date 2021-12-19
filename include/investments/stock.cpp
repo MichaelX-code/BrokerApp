@@ -1,11 +1,7 @@
 #include "stock.h"
 
-Stock::Stock(std::string name, double profit, double risk) :
-Investment(name, profit, risk)
-{}
-
-inv_id_t
-Stock::generate_id()
+Stock::Stock(std::string name, double price, double profit, double risk) :
+Investment(name, price, profit, risk)
 {
-    return 1e3 + iota();
+    this->_id = 1e3 + iota();
 }

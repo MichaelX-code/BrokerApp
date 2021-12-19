@@ -4,12 +4,13 @@
 int
 main(void)
 {
-    Market market; 
-    list<int> li = {1, 2, 3};
-    li.push_back(4);
-    list<std::unique_ptr<Investment>> invs = market.get_available();
-    for (auto& inv : invs)
-        std::cout << inv->get_name() << ' ' << inv->get_id() << '\n';
+    Market market;
+
+    for (int i = 0; i < 50; ++i)
+    {
+        std::cout << market.get_available()[0]->get_price() << '\n';
+        market.step();
+    }
 
     return (EXIT_SUCCESS);
 }

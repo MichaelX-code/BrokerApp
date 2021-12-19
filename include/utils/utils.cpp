@@ -7,6 +7,7 @@ iota()
     return _count++;
 }
 
+[[maybe_unused]]
 std::string
 demangle(const char * name)
 {

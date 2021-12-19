@@ -4,6 +4,8 @@
 #include <iostream>
 #include <iterator>
 
+// FIXME: rewrite list to use shared_ptr instead of raw pointers  
+
 template<class T>
 struct node_t {
     T data;

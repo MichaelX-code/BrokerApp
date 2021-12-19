@@ -1,5 +1,5 @@
-#ifndef BROKERAPP_STOCK_H
-#define BROKERAPP_STOCK_H
+#ifndef BROKERAPP_INVESTMENTS_STOCK_H
+#define BROKERAPP_INVESTMENTS_STOCK_H
 
 #include "../utils/utils.h"
 #include "investment.hpp"
@@ -7,10 +7,7 @@
 class Stock : public Investment
 {
 public:
-    Stock(std::string name, double profit, double risk);
-private:
-    // Private functions:
-    inv_id_t generate_id();
+    Stock(std::string name, double price, double profit, double risk);
 };
 
-#endif // BROKERAPP_STOCK_H
+#endif // BROKERAPP_INVESTMENTS_STOCK_H

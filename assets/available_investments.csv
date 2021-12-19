@@ -1,12 +1,21 @@
+# All inputs are formated like so:
+# type,name,price,profit,risk,exiry_date
+
 # Stocks:
-Stock,Apple,1.06,0.03
-Stock,Alphabet,1.04,0.05
-Stock,Kodak,1.1,0.15
+Stock,Apple,171.1,1.06,0.03
+Stock,Alphabet,2867.5,1.04,0.05
+Stock,Kodak,5.16,1.1,0.15
 
 # Obligations:
-Obligation,АФК Система выпуск 15,1.1,0.02,01.11.2024
+Obligation,АФК Система выпуск 15,1028,1.1,0.02,01.11.2024
+Obligation,АФК Система выпуск 16,1028,1.1,0.02,01.02.2025
+Obligation,АФК Система выпуск 17,1028,1.1,0.02,01.06.2025
 
 # Metals:
-Metal,Gold,1.02,0.01
+Metal,Gold,455.57,1.02,0.01
+Metal,Silver,53.73,1.01,0.01
 
-# Currency:
+# Currencies:
+Currency,RUB,1,1,0
+Currency,USD,74.1,1.01,0.07
+Currency,EUR,83.4725,1.02,0.06

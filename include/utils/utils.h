@@ -11,6 +11,7 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <random>
 
 #include "date.h"
 #include "list.hpp"
@@ -20,6 +21,6 @@ typedef unsigned long inv_id_t;
 
 inv_id_t iota();
 
-std::string demangle(const char* name);
+[[maybe_unused]] std::string demangle(const char* name);
 
 #endif // BROKERAPP_UTILS_H

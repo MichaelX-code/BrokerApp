@@ -70,9 +70,6 @@ csv_parser_t::next_line()
 void
 csv_parser_t::blame_last_line(std::string msg)
 {
-    std::cerr << "ERROR: " << msg << ": \"";
-    for (auto& cell : _last_line)
-        std::cerr << cell << ',';
-    std::cerr << "\"\n";
+    std::cerr << "ERROR: " << msg << ": \"" << _last_line << "\"\n";
     exit(EXIT_FAILURE);
 }

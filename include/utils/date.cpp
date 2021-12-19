@@ -94,9 +94,9 @@ date_t::set_year(unsigned year)
 bool
 operator < (const date_t &a, const date_t &b)
 {
-    return (a._year < b._year ||
-            a._year == b._year && a._month < b._month ||
-            a._year == b._year && a._month == b._month && a._day < b._day);
+    return ((a._year < b._year) ||
+            (a._year == b._year && a._month < b._month) ||
+            (a._year == b._year && a._month == b._month && a._day < b._day));
 }
 
 bool

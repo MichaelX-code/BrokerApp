@@ -90,3 +90,17 @@ Investment::set_risk(double risk)
     }
     this->_risk = risk;
 }
+
+// Operators overloads:
+
+bool
+Investment::operator == (const Investment& other)
+{
+    return (this->get_id() == other.get_id());
+}
+
+bool
+Investment::operator != (const Investment& other)
+{
+    return !(*this == other);
+}

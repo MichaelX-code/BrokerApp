@@ -18,4 +18,6 @@ private:
     date_t _expiry_date;
 };
 
+typedef std::shared_ptr<Obligation> obligation_ptr_t;
+
 #endif // BROKERAPP_INVESTMENTS_OBLIGATION_H

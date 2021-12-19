@@ -92,7 +92,7 @@ const
     return this->_cur_date;
 }
 
-const list<std::shared_ptr<Investment>>&
+const investments_list_t&
 Market::get_available()
 const
 {
@@ -131,15 +131,11 @@ Market::_update_prices()
 void
 Market::_clean_expired()
 {
-    std::shared_ptr<Obligation> obl(nullptr);
+    obligation_ptr_t obl(nullptr);
     for (auto it = _available.begin(); it != _available.end(); ++it)
-    {
         if ((obl = std::dynamic_pointer_cast<Obligation>(*it)) &&
             obl->get_expiry_date() <= _cur_date)
-        {
-            _available.erase(it++);
-        }
-    }
+                _available.erase(it++);
 }
 
 void
@@ -148,4 +144,33 @@ Market::step()
     _step_date();
     _update_prices();
     _clean_expired();
+}
+
+std::string
+get_csv_style_info(const investment_ptr_t& investment_ptr)
+{
+    std::stringstream info_stream;    
+    info_stream << ',' << investment_ptr->get_name()
+                << ',' << investment_ptr->get_price()
+                << ',' << investment_ptr->get_profit()
+                << ',' << investment_ptr->get_risk();
+
+    std::string csv_style_info(info_stream.str());
+
+    stock_ptr_t         stock(nullptr);
+    obligation_ptr_t    obl(nullptr);
+    metal_ptr_t         metal(nullptr);
+    currency_ptr_t      cur(nullptr);
+
+    if ((stock = std::dynamic_pointer_cast<Stock>(investment_ptr)))
+        csv_style_info = "Stock" + csv_style_info;
+    else if ((obl = std::dynamic_pointer_cast<Obligation>(investment_ptr)))
+        csv_style_info = "Obligation" + csv_style_info +
+                         obl->get_expiry_date().get_formated();
+    else if ((metal = std::dynamic_pointer_cast<Metal>(investment_ptr)))
+        csv_style_info = "Metal" + csv_style_info;
+    else if ((cur = std::dynamic_pointer_cast<Currency>(investment_ptr)))
+        csv_style_info = "Currency" + csv_style_info;
+
+    return csv_style_info;
 }

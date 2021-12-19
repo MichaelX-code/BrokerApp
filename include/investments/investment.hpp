@@ -13,16 +13,21 @@ public:
     virtual ~Investment() = 0;
 
     // Functions: selectors (get)
-    inv_id_t get_id() const noexcept;
-    double get_price() const noexcept;
-    double get_risk() const noexcept;
-    double get_profit() const noexcept;
-    std::string get_name() const;
+    inv_id_t get_id()           const noexcept;
+    double get_price()          const noexcept;
+    double get_risk()           const noexcept;
+    double get_profit()         const noexcept;
+    std::string get_name()      const;
+
     
     // Functions: modifiers (set)
     void set_price(double price);
     void set_profit(double profit);
     void set_risk(double risk);
+
+    // Operators overloads:
+    bool operator == (const Investment& other);
+    bool operator != (const Investment& other);
 
 protected:
     // Members:
@@ -32,5 +37,8 @@ protected:
     double _risk;
     inv_id_t _id;
 };
+
+typedef std::shared_ptr<Investment> investment_ptr_t;
+typedef list<investment_ptr_t> investments_list_t;
 
 #endif // BROKERAPP_INVESTMENTS_INVESTMENT_H

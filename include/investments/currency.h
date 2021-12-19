@@ -7,8 +7,11 @@
 class Currency : public Investment
 {
 public:
+    // Constructors:
     Currency(std::string name, double price, double profit, double risk);
 private:
 };
+
+typedef std::shared_ptr<Currency> currency_ptr_t;
 
 #endif // BROKERAPP_INVESTMENTS_CURRENCY_H

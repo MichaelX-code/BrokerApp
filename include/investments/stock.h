@@ -7,7 +7,10 @@
 class Stock : public Investment
 {
 public:
+    // Constructors:
     Stock(std::string name, double price, double profit, double risk);
 };
+
+typedef std::shared_ptr<Stock> stock_ptr_t;
 
 #endif // BROKERAPP_INVESTMENTS_STOCK_H

@@ -25,9 +25,9 @@ public:
 
 private:
     // Members:
-    std::string _file_path;
+    std::string   _file_path;
     std::ifstream _fstream;
-    std::string _last_line;
+    std::string   _last_line;
 };
 
 #endif // BROKERAPP_UTILS_CSV_PARSER_H

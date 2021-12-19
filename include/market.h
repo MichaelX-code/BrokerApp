@@ -16,19 +16,21 @@ public:
 
     // Functions: selectors (get)
     date_t get_date() const;
-    const list<std::shared_ptr<Investment>>& get_available() const;
+    const investments_list_t& get_available() const;
 
     // Methods:
     void step();
 private:
     // Members:
     date_t _cur_date;
-    list<std::shared_ptr<Investment>> _available;
+    investments_list_t _available;
 
     // Helpful functions:
     void _step_date();
     void _update_prices();
     void _clean_expired();
 };
+
+std::string get_csv_style_info(const investment_ptr_t& investment_ptr);
 
 #endif // BROKERAPP_MARKET_H

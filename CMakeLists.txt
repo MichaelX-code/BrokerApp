@@ -9,6 +9,7 @@ set(SOURCE_FILES
     include/investments/obligation.cpp
     include/investments/metal.cpp
     include/investments/currency.cpp
+    include/broker_game.cpp
     include/fund.cpp
     include/market.cpp
     include/utils/utils.cpp

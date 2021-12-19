@@ -27,15 +27,15 @@ public:
     ~list();
 
     // Functions: selectors (get)
-    bool empty() const noexcept;
-    T& front() const noexcept;
-    T& back() const noexcept;
-    const unsigned long long& size() const noexcept;
+    bool empty()                        const noexcept;
+    T& front()                          const noexcept;
+    T& back()                           const noexcept;
+    const unsigned long long& size()    const noexcept;
 
-    List_iterator begin() const noexcept;
-    List_iterator end() const noexcept;
-    List_reverse_iterator rbegin() const noexcept;
-    List_reverse_iterator rend() const noexcept;
+    List_iterator begin()               const noexcept;
+    List_iterator end()                 const noexcept;
+    List_reverse_iterator rbegin()      const noexcept;
+    List_reverse_iterator rend()        const noexcept;
 
     // Methods:
     void push_front(const T& x);
@@ -79,9 +79,9 @@ private:
         operator bool () const;
 
         List_iterator& operator ++ ();
-        List_iterator operator ++ (int);
+        List_iterator operator  ++ (int);
         List_iterator& operator -- ();
-        List_iterator operator -- (int);
+        List_iterator operator  -- (int);
 
         bool operator == (const List_iterator& other) const noexcept;
         bool operator != (const List_iterator& other) const noexcept;
@@ -95,9 +95,9 @@ private:
         using List_iterator::List_iterator;
 
         List_reverse_iterator& operator ++ ();
-        List_reverse_iterator operator ++ (int);
+        List_reverse_iterator operator  ++ (int);
         List_reverse_iterator& operator -- ();
-        List_reverse_iterator operator -- (int);
+        List_reverse_iterator operator  -- (int);
     };
 };
 

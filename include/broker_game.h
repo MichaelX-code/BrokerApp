@@ -39,6 +39,7 @@ private:
     void _draw_owned();
     void _draw_stats();
     void _draw_help();
+    void _draw_easter();
     void _draw_console();
     void error_cmd_msg(std::string msg, void color());
 };

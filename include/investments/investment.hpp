@@ -36,6 +36,7 @@ protected:
     double _profit;
     double _risk;
     inv_id_t _id;
+    rubles _diff;
 };
 
 typedef std::shared_ptr<Investment> investment_ptr_t;

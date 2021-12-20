@@ -8,7 +8,7 @@ class Obligation : public Investment
 {
 public:
     // Constructors:
-    Obligation(std::string name, double price, double profit, double risk,
+    Obligation(std::string name, rubles price, double profit, double risk,
                date_t expiry_date);
 
     // Functions: selectors (get)

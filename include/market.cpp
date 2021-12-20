@@ -25,7 +25,7 @@ Market::Market()
                 csv_parser.blame_last_line("Not valid number of args");
 
             std::string stock_name = inv_info[1];
-            double stock_price = stod(inv_info[2]);
+            rubles stock_price = stod(inv_info[2]);
             double stock_profit = stod(inv_info[3]);
             double stock_risk = stod(inv_info[4]);
             this->_available.emplace_back(
@@ -38,7 +38,7 @@ Market::Market()
                 csv_parser.blame_last_line("Not valid number of args");
 
             std::string obl_name = inv_info[1];
-            double obl_price = stod(inv_info[2]);
+            rubles obl_price = stod(inv_info[2]);
             double obl_profit = stod(inv_info[3]);
             double obl_risk = stod(inv_info[4]);
             date_t obl_expiry_date = inv_info[5];
@@ -53,7 +53,7 @@ Market::Market()
                 csv_parser.blame_last_line("Not valid number of args");
 
             std::string metal_name = inv_info[1];
-            double metal_price = stod(inv_info[2]);
+            rubles metal_price = stod(inv_info[2]);
             double metal_profit = stod(inv_info[3]);
             double metal_risk = stod(inv_info[4]);
             this->_available.emplace_back(
@@ -66,7 +66,7 @@ Market::Market()
                 csv_parser.blame_last_line("Not valid number of args");
 
             std::string cur_name = inv_info[1];
-            double cur_price = stod(inv_info[2]);
+            rubles cur_price = stod(inv_info[2]);
             double cur_profit = stod(inv_info[3]);
             double cur_risk = stod(inv_info[4]);
             this->_available.emplace_back(
@@ -122,7 +122,7 @@ Market::_update_prices()
     {
         // random number from [-1; 1]
         double rand_d = (static_cast<double>(rand()) / RAND_MAX) * 2 - 1;
-        double new_price = inv->get_price() * (1 + rand_d * inv->get_profit() *
+        rubles new_price = inv->get_price() * (1 + rand_d * inv->get_profit() *
                                                    inv->get_risk());
         inv->set_price(new_price);
     }
@@ -212,7 +212,8 @@ get_table_style_info(const investment_ptr_t& investment_ptr, int n)
     if (n > 0)
         table_row_buffer << std::setw(2) << n << '|';
 
-    table_row_buffer << std::setw(10) << inv_type                     << '|'
+    table_row_buffer << std::setw(3)  << investment_ptr->get_id()     << '|'
+                     << std::setw(10) << inv_type                     << '|'
                      << std::setw(12) << name                         << '|'
                      << std::setw(7)  << investment_ptr->get_price()  << '|'
                      << std::setw(6)  << investment_ptr->get_profit() << '|'

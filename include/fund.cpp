@@ -1,10 +1,10 @@
 #include "fund.h"
 
-Fund::Fund() :
-_budget(100000)
+Fund::Fund(rubles default_budget) :
+_budget(default_budget)
 {}
 
-const investments_list_t&
+const fund_investments_t&
 Fund::get_owned()
 const noexcept
 {
@@ -18,25 +18,38 @@ const noexcept
     return _budget;
 }
 
-void
-Fund::buy(investment_ptr_t investment_ptr)
+bool
+Fund::buy(investment_ptr_t investment_ptr, int n)
 {
-    if (_budget < investment_ptr->get_price())
+    if (!investment_ptr)
+        return false;
+
+    if (_budget < investment_ptr->get_price() * n)
     {
         std::cerr << "ERROR: Could not buy investment "
                   << investment_ptr->get_name() << " for "
                   << investment_ptr->get_price() << " RUB: "
                   << "Not enough money!\n";
-        return;
+        return false;
     }
 
-    _budget -= investment_ptr->get_price();
-    _owned.push_back(investment_ptr);
+    _budget -= investment_ptr->get_price() * n;
+    _owned[investment_ptr] += n;
+    return true;
 }
 
-void
-Fund::sell(investment_ptr_t investment_ptr)
+bool
+Fund::sell(investment_ptr_t investment_ptr, int n)
 {
-    _budget += investment_ptr->get_price();
-    _owned.erase(_owned.find(investment_ptr));
+    auto inv_p = _owned.find(investment_ptr);
+
+    if (n < inv_p->second)
+        inv_p->second -= n;
+    else if (n == inv_p->second)
+        _owned.erase(inv_p);
+    else
+        return false;
+
+    _budget += investment_ptr->get_price() * n;
+    return true;
 }

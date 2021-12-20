@@ -22,13 +22,15 @@ table_header()
 {
     std::stringstream buffer;
     buffer << std::left 
+           << std::setw(3)  << "Id"     << '|'
            << std::setw(10) << "Type"   << '|'
            << std::setw(12) << "Name"   << '|'
            << std::setw(7)  << "Price"  << '|'
            << std::setw(6)  << "Profit" << '|'
            << std::setw(4)  << "Risk"   << '\n';
 
-    buffer << std::string(10, '-') << '+'
+    buffer << std::string(3,  '-') << '+'
+           << std::string(10, '-') << '+'
            << std::string(12, '-') << '+'
            << std::string(7,  '-') << '+'
            << std::string(6,  '-') << '+'
@@ -82,6 +84,17 @@ set_tem_color_default()
     SetConsoleTextAttribute(hConsole, 15);
 #else
     std::cout << "\033[0m";
+#endif
+}
+
+void
+set_tem_color_green()
+{
+#ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 10);
+#else
+    std::cout << "\033[0;32m";
 #endif
 }
 

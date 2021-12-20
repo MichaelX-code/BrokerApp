@@ -9,7 +9,7 @@ class BrokerGame
 {
 public:
     // Constructor:
-    BrokerGame(size_t game_end = 12);
+    BrokerGame(size_t game_end = 12, rubles default_fund_budget = 1000000);
 
     // Destructor:
     ~BrokerGame();
@@ -40,6 +40,7 @@ private:
     void _draw_stats();
     void _draw_help();
     void _draw_console();
+    void error_cmd_msg(std::string msg, void color());
 };
 
 #endif // BROKERAPP_BROKER_GAME_H

@@ -8,7 +8,7 @@ class Stock : public Investment
 {
 public:
     // Constructors:
-    Stock(std::string name, double price, double profit, double risk);
+    Stock(std::string name, rubles price, double profit, double risk);
 };
 
 typedef std::shared_ptr<Stock> stock_ptr_t;

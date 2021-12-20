@@ -8,7 +8,7 @@ class Metal : public Investment
 {
 public:
     // Constructors:
-    Metal(std::string name, double price, double profit, double risk);
+    Metal(std::string name, rubles price, double profit, double risk);
 private:
 };
 

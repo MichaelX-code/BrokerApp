@@ -8,7 +8,7 @@ class Currency : public Investment
 {
 public:
     // Constructors:
-    Currency(std::string name, double price, double profit, double risk);
+    Currency(std::string name, rubles price, double profit, double risk);
 private:
 };
 

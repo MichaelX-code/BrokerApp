@@ -27,6 +27,7 @@
 #include "csv_parser.h"
 
 typedef unsigned long inv_id_t;
+typedef long double   rubles;
 
 enum game_status_t {
     PLAYING,
@@ -46,6 +47,7 @@ std::pair<int, int> get_term_size();
 std::vector<std::string> parse_into_words(std::string s);
 
 void set_tem_color_red();
+void set_tem_color_green();
 void set_tem_color_default();
 
 #endif // BROKERAPP_UTILS_H

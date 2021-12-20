@@ -1,7 +1,7 @@
 #include "metal.h"
 
-Metal::Metal(std::string name, double price, double profit, double risk) :
+Metal::Metal(std::string name, rubles price, double profit, double risk) :
 Investment(name, price, profit, risk)
 {
-    this->_id = 3e3 + iota();
+    this->_id = 3e2 + iota();
 }

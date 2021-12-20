@@ -2,7 +2,7 @@
 
 // Constructors:
 
-Investment::Investment(std::string name, double price,
+Investment::Investment(std::string name, rubles price,
                        double profit, double risk) :
 _name(name), _price(price), _profit(profit), _risk(risk)
 {
@@ -37,7 +37,7 @@ const noexcept
     return this->_risk;
 }
 
-double
+rubles
 Investment::get_price()
 const noexcept
 {
@@ -59,7 +59,7 @@ const
 }
 
 void
-Investment::set_price(double price)
+Investment::set_price(rubles price)
 {
     if (price < 0)
     {

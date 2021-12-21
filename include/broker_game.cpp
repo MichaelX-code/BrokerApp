@@ -66,7 +66,7 @@ BrokerGame::_draw_available()
     for (auto& investment : _market->get_available())
         std::cout << get_table_style_info(investment);
 
-    _cursor_row = 3 + _market->get_available().size();
+    _cursor_pos.second = 3 + _market->get_available().size();
 }
 
 void
@@ -75,7 +75,7 @@ BrokerGame::_draw_single_column_owned()
     if (_fund->get_owned().size() == 0)
     {
         std::cout << "\nYou don't own any investments at the moment\n";
-        _cursor_row += 2;
+        _cursor_pos.second += 2;
         return;
     }
 
@@ -86,7 +86,7 @@ BrokerGame::_draw_single_column_owned()
     for (auto& inv : _fund->get_owned())
         std::cout << get_table_style_info(inv.first, inv.second);
 
-    _cursor_row += 4 + _fund->get_owned().size();
+    _cursor_pos.second += 4 + _fund->get_owned().size();
 }
 
 void
@@ -94,12 +94,15 @@ BrokerGame::_draw_two_columns_owned()
 {
     int cur_cursor_row = 0;
     int second_col = 49;
+
+    _clear_second_column(second_col);
+
     set_cursor_pos(second_col, cur_cursor_row++);
 
     if (_fund->get_owned().size() == 0)
     {
         std::cout << "     You don't own any investments at the moment";
-        set_cursor_pos(0, _cursor_row);
+        set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
         return;
     }
 
@@ -115,7 +118,25 @@ BrokerGame::_draw_two_columns_owned()
         std::cout << get_table_style_info(inv.first, inv.second);
         set_cursor_pos(second_col, cur_cursor_row++);
     }
-    set_cursor_pos(0, _cursor_row);
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+}
+
+void
+BrokerGame::_clear_second_column(int second_col)
+{
+    int cur_cursor_row = 0;
+    set_cursor_pos(second_col, cur_cursor_row++);
+
+    size_t n_lines = _market->get_available().size();
+    size_t n_col = get_term_size().first - second_col;
+
+    for (int i = 0; i < n_lines; ++i)
+    {
+        std::cout << std::string(n_col, ' ');
+        set_cursor_pos(second_col, cur_cursor_row++);
+    }
+
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
 void
@@ -130,12 +151,14 @@ BrokerGame::_draw_owned()
 void
 BrokerGame::_draw_stats()
 {
+    _cursor_pos.first = 0;
+    _cursor_pos.second = 3 + _market->get_available().size();
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
     std::cout << "\nStats:\n";    
-    _cursor_row += 2;
     std::cout << "Current date: " << _market->get_date().get_formated() << '\n';
     std::cout << "Fund budget: " << _fund->get_budget() << " rub" << '\n';
 
-    _cursor_row += 2;
+    _cursor_pos.second += 4;
 }
 
 void
@@ -143,7 +166,8 @@ BrokerGame::_draw_console()
 {
     std::cout << "\nEnter a command (\"help\" to see all commands):\n";
     std::cout << "> ";
-    _cursor_row += 2;
+    _cursor_pos.first = 2;
+    _cursor_pos.second += 2;
 }
 
 void
@@ -276,7 +300,9 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
         after_cmd_msg("ERROR: Could not make such purchase!",
                        set_tem_color_red);
 
-    draw_interface();
+    _draw_owned();
+    _draw_stats();
+    _draw_console();
 }
 
 void
@@ -310,26 +336,30 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
     else
         after_cmd_msg("ERROR: You don't own that!", set_tem_color_red);
 
-    draw_interface();
+    _draw_owned();
+    _draw_stats();
+    _draw_console();
 }
 
 void
 BrokerGame::after_cmd_msg(std::string msg, void color())
 {
     // clear msg line
-    set_cursor_pos(0, _cursor_row + 1);
+    set_cursor_pos(0, _cursor_pos.second + 1);
     std::cout << std::string(get_term_size().first, ' ');
 
     // write msg
-    set_cursor_pos(0, _cursor_row + 1);
+    set_cursor_pos(0, _cursor_pos.second + 1);
     color();
     std::cout << msg;
 
     // clear console
     set_tem_color_default();
-    set_cursor_pos(0, _cursor_row);
+    set_cursor_pos(0, _cursor_pos.second);
     std::cout << std::string(get_term_size().first, ' ');
     std::cout << '\r' << "> ";
+    _cursor_pos.first = 2;
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
 void

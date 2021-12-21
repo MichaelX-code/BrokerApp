@@ -42,6 +42,9 @@ Fund::sell(investment_ptr_t investment_ptr, int n)
 {
     auto inv_p = _owned.find(investment_ptr);
 
+    if (inv_p == _owned.end())
+        return false;
+
     if (n < inv_p->second)
         inv_p->second -= n;
     else if (n == inv_p->second)

@@ -36,7 +36,7 @@ private:
     Fund   * _fund;
     size_t _game_duration;
     size_t _game_end;
-    int _cursor_row = 0;
+    pos_t _cursor_pos = std::make_pair(0, 0);
     game_status_t _status;
     tui_mode_t _tui_mode;
 
@@ -47,6 +47,7 @@ private:
     void _draw_owned();
     void _draw_single_column_owned();
     void _draw_two_columns_owned();
+    void _clear_second_column(int second_col);
     void _draw_stats();
     void _draw_help();
     void _draw_easter();

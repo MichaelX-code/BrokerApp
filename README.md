@@ -5,7 +5,9 @@
 This is a TUI game which simulates investment market and lets player control a
 fund: buy or sell investment lots.
 
-Github repo: <https://github.com/MichaelX-code/BrokerApp>
+GitHub repo: <https://github.com/MichaelX-code/BrokerApp>
+
+> IT IS HIGHLY RECOMMENDED TO RUN WITH TERMINAL WIDTH AT LEAST 100 CHARACTERS
 
 ## Project structure
 

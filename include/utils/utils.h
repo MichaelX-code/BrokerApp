@@ -30,6 +30,7 @@
 
 typedef unsigned long inv_id_t;
 typedef long double   rubles;
+typedef std::pair<int, int> pos_t;
 
 enum game_status_t {
     PLAYING,

@@ -122,8 +122,8 @@ Market::_update_prices()
     {
         // random number from [-1; 1]
         double rand_d = (static_cast<double>(rand()) / RAND_MAX) * 2 - 1;
-        rubles new_price = inv->get_price() * (1 + rand_d * inv->get_profit() *
-                                                   inv->get_risk());
+        rubles new_price = inv->get_price() * (inv->get_profit() +
+                                               rand_d * inv->get_risk());
         inv->set_price(new_price);
     }
 }

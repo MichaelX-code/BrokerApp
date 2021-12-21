@@ -1,7 +1,7 @@
 #include "fund.h"
 
 Fund::Fund(rubles default_budget) :
-_budget(default_budget)
+_budget(default_budget), _start_budget(default_budget)
 {}
 
 fund_investments_t
@@ -10,7 +10,7 @@ Fund::get_owned()
     return _owned;
 }
 
-double
+rubles
 Fund::get_budget()
 const noexcept
 {
@@ -20,17 +20,8 @@ const noexcept
 bool
 Fund::buy(investment_ptr_t investment_ptr, int n)
 {
-    if (!investment_ptr)
+    if (!investment_ptr || (_budget < investment_ptr->get_price() * n))
         return false;
-
-    if (_budget < investment_ptr->get_price() * n)
-    {
-        std::cerr << "ERROR: Could not buy investment "
-                  << investment_ptr->get_name() << " for "
-                  << investment_ptr->get_price() << " RUB: "
-                  << "Not enough money!\n";
-        return false;
-    }
 
     _budget -= investment_ptr->get_price() * n;
     _owned[investment_ptr] += n;
@@ -53,5 +44,31 @@ Fund::sell(investment_ptr_t investment_ptr, int n)
         return false;
 
     _budget += investment_ptr->get_price() * n;
+    return true;
+}
+
+rubles
+Fund::calc_earnings()
+const
+{
+    auto each = [](rubles x, const std::pair<investment_ptr_t, int>& inv_p) {
+                         return x + inv_p.first->get_price() * inv_p.second;
+                };
+
+    rubles _cur_wealth = std::accumulate(_owned.begin(), _owned.end(), _budget,
+                                         each);
+    
+    return _cur_wealth - _start_budget;
+}
+
+bool
+Fund::pay_taxes(double tax_rate)
+{
+    if (tax_rate < 0 || tax_rate > 1)
+        return false;
+
+    if (calc_earnings() > 0)
+        _budget -= calc_earnings() * tax_rate;    
+    
     return true;
 }

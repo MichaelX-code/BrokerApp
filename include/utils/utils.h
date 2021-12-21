@@ -51,6 +51,7 @@ std::vector<std::string> parse_into_words(std::string s);
 
 void set_tem_color_red();
 void set_tem_color_green();
+void set_tem_color_orange();
 void set_tem_color_default();
 
 std::string get_table_header();

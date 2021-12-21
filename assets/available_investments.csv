@@ -4,9 +4,9 @@
 # type,name,price,profit,risk,exiry_date
 
 # Stocks:
-Stock,Apple,171.1,1.06,0.03
-Stock,Alphabet,2867.5,1.04,0.05
-Stock,Kodak,5.16,1.1,0.15
+Stock,Apple,171.1,1.12,0.05
+Stock,Alphabet,2867.5,1.09,0.03
+Stock,Kodak,5.16,1.03,0.01
 
 # Obligations:
 Obligation,VK publication 1,1028,1.1,0.02,01.11.2024

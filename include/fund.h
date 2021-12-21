@@ -11,14 +11,17 @@ public:
 
     // Functions: selectors (get)
     fund_investments_t get_owned();
-    double get_budget()                     const noexcept;
+    rubles get_budget() const noexcept;
 
     // Methods:
     bool buy(investment_ptr_t investment_ptr, int n);
     bool sell(investment_ptr_t investment_ptr, int n);
+    rubles calc_earnings() const;
+    bool pay_taxes(double tax_rate);
 private:
     fund_investments_t _owned;
-    double _budget;
+    rubles _budget;
+    rubles _start_budget;
 };
 
 #endif // BROKERAPP_FUND_H

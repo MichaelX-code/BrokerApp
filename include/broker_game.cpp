@@ -40,10 +40,17 @@ BrokerGame::step()
     _market->step();
     ++_game_duration;
 
+    if (get_date().get_month() == 1)
+    {
+        if(_fund->pay_taxes(_tax_rate))
+            after_cmd_msg("INFO: Paid taxes", set_tem_color_orange);
+        else
+            after_cmd_msg("INFO: could not pay taxes: invalid tax rate",    
+                          set_tem_color_orange);
+    }
     if (_game_duration == _game_end)
         _status = ENDED;
 }
-
 BrokerGame::operator bool()
 const
 {
@@ -149,16 +156,25 @@ BrokerGame::_draw_owned()
 }
 
 void
-BrokerGame::_draw_stats()
+BrokerGame::_draw_quick_stats()
 {
     _cursor_pos.first = 0;
     _cursor_pos.second = 3 + _market->get_available().size();
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
-    std::cout << "\nStats:\n";    
+    std::cout << "\nQuick stats:\n";    
     std::cout << "Current date: " << _market->get_date().get_formated() << '\n';
     std::cout << "Fund budget: " << _fund->get_budget() << " rub" << '\n';
 
-    _cursor_pos.second += 4;
+    std::cout << "Total earnings: "; 
+    if (_fund->calc_earnings() > 0)
+        set_tem_color_green();
+    else if (_fund->calc_earnings() < 0)
+        set_tem_color_red();
+
+    std::cout << _fund->calc_earnings() << " rub" << '\n';
+    set_tem_color_default();
+
+    _cursor_pos.second += 5;
 }
 
 void
@@ -176,7 +192,7 @@ BrokerGame::draw_interface()
     clear_terminal();
     _draw_available();
     _draw_owned();
-    _draw_stats();
+    _draw_quick_stats();
     _draw_console();
 }
 
@@ -214,7 +230,7 @@ BrokerGame::_draw_help()
 }
 
 void
-BrokerGame::get_command()
+BrokerGame::command()
 {
     std::string command;
 
@@ -301,7 +317,7 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
                        set_tem_color_red);
 
     _draw_owned();
-    _draw_stats();
+    _draw_quick_stats();
     _draw_console();
 }
 
@@ -337,7 +353,7 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
         after_cmd_msg("ERROR: You don't own that!", set_tem_color_red);
 
     _draw_owned();
-    _draw_stats();
+    _draw_quick_stats();
     _draw_console();
 }
 
@@ -360,6 +376,12 @@ BrokerGame::after_cmd_msg(std::string msg, void color())
     std::cout << '\r' << "> ";
     _cursor_pos.first = 2;
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+}
+
+void
+BrokerGame::end()
+{
+
 }
 
 void

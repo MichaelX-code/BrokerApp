@@ -103,9 +103,20 @@ set_tem_color_red()
 {
 #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    SetConsoleTextAttribute(hConsole, 31);
 #else
     std::cout << "\033[31m";
+#endif
+}
+
+void
+set_tem_color_orange()
+{
+#ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 33);
+#else
+    std::cout << "\033[33m";
 #endif
 }
 

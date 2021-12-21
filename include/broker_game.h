@@ -27,7 +27,8 @@ public:
     // Methods:
     void step();
     void draw_interface();
-    void get_command();
+    void command();
+    void end();
 
     // Operators overloads:
     operator bool () const;
@@ -39,6 +40,7 @@ private:
     pos_t _cursor_pos = std::make_pair(0, 0);
     game_status_t _status;
     tui_mode_t _tui_mode;
+    double _tax_rate = 0.17;
 
     // Private functions:
     tui_mode_t _pick_tui_mode();
@@ -48,7 +50,7 @@ private:
     void _draw_single_column_owned();
     void _draw_two_columns_owned();
     void _clear_second_column(int second_col);
-    void _draw_stats();
+    void _draw_quick_stats();
     void _draw_help();
     void _draw_easter();
     void _draw_console();

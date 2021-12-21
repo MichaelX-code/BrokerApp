@@ -40,6 +40,7 @@ BrokerGame::step()
     _market->step();
     ++_game_duration;
 
+    // TODO: This msg cannot be seen because of screen update after
     if (get_date().get_month() == 1)
     {
         if(_fund->pay_taxes(_tax_rate))
@@ -48,9 +49,11 @@ BrokerGame::step()
             after_cmd_msg("INFO: could not pay taxes: invalid tax rate",    
                           set_tem_color_orange);
     }
+
     if (_game_duration == _game_end)
         _status = ENDED;
 }
+
 BrokerGame::operator bool()
 const
 {

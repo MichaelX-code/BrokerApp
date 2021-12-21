@@ -13,6 +13,7 @@
 #include <sstream>
 #include <random>
 #include <iomanip>
+#include <numeric>
 #include <stdio.h>
 
 #ifdef _WIN32

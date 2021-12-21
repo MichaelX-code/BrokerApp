@@ -108,3 +108,33 @@ set_tem_color_red()
     std::cout << "\033[31m";
 #endif
 }
+
+std::string
+get_table_header()
+{
+    std::stringstream buffer;
+    buffer << std::left
+           << std::setw(3)  << "Id"     << '|'
+           << std::setw(10) << "Type"   << '|'
+           << std::setw(12) << "Name"   << '|'
+           << std::setw(7)  << "Price"  << '|'
+           << std::setw(6)  << "Profit" << '|'
+           << std::setw(4)  << "Risk" << '\n';
+
+    return buffer.str();
+}
+
+std::string
+get_table_divider()
+{
+    std::stringstream buffer;
+    buffer << std::string(3,  '-') << '+'
+           << std::string(10, '-') << '+'
+           << std::string(12, '-') << '+'
+           << std::string(7,  '-') << '+'
+           << std::string(6,  '-') << '+'
+           << std::string(4,  '-') << '\n';
+
+
+    return buffer.str();
+}

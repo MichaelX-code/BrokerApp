@@ -1,4 +1,11 @@
-# Broker App "Broke Up"
+# Broker App
+
+## Info
+
+This is a TUI game which simulates investment market and lets player control a
+fund: buy or sell investment lots.
+
+Github repo: <https://github.com/MichaelX-code/BrokerApp>
 
 ## Project structure
 
@@ -71,3 +78,8 @@ Utility classes:
     ```
 
 1. Run using `./BrokerApp` in `build` folder.
+
+## To-do
+
+- [ ] Implement logger class which writes everything into separate file
+- [ ] Improve data set to be more realistic

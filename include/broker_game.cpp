@@ -4,7 +4,7 @@
 
 BrokerGame::BrokerGame(size_t game_end, rubles default_fund_budget) :
 _market(new Market()), _fund(new Fund(default_fund_budget)), _game_duration(0),
-_game_end(game_end), _status(PLAYING)
+_game_end(game_end), _status(PLAYING), _tui_mode(_pick_tui_mode())
 {}
 
 // Destructor:
@@ -50,110 +50,81 @@ const
     return (_status == PLAYING);
 }
 
+tui_mode_t
+BrokerGame::_pick_tui_mode()
+{
+    return (get_term_size().first < 100 ? SINGLE_COLUMN : TWO_COLUMNS);
+}
+
 void
 BrokerGame::_draw_available()
 {
     set_cursor_pos(0, 0);
-    _cursor_row = 1;
-    std::stringstream buffer;
-    buffer << "   Investments available on the market:\n";
-    buffer << table_header(); _cursor_row += 2;
+    std::cout << "   Investments available on the market:\n";
+    std::cout << table_header();
 
     for (auto& investment : _market->get_available())
+        std::cout << get_table_style_info(investment);
+
+    _cursor_row = 3 + _market->get_available().size();
+}
+
+void
+BrokerGame::_draw_single_column_owned()
+{
+    if (_fund->get_owned().size() == 0)
     {
-        buffer << get_table_style_info(investment);
-        ++_cursor_row;
+        std::cout << "\nYou don't own any investments at the moment\n";
+        _cursor_row += 2;
+        return;
     }
 
-    std::cout << buffer.str();
-    buffer.clear();
+    std::cout << "\n           Investments you own:\n";
+    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header();
+    std::cout << std::string(3,  '-') << '+' << get_table_divider();
+
+    for (auto& inv : _fund->get_owned())
+        std::cout << get_table_style_info(inv.first, inv.second);
+
+    _cursor_row += 4 + _fund->get_owned().size();
+}
+
+void
+BrokerGame::_draw_two_columns_owned()
+{
+    int cur_cursor_row = 0;
+    int second_col = 49;
+    set_cursor_pos(second_col, cur_cursor_row++);
+
+    if (_fund->get_owned().size() == 0)
+    {
+        std::cout << "     You don't own any investments at the moment";
+        set_cursor_pos(0, _cursor_row);
+        return;
+    }
+
+    std::cout << "           Investments you own:";
+    set_cursor_pos(second_col, cur_cursor_row++);
+    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header();
+    set_cursor_pos(second_col, cur_cursor_row++);
+    std::cout << std::string(3,  '-') << '+' << get_table_divider();
+
+    set_cursor_pos(second_col, cur_cursor_row++);
+    for (auto& inv : _fund->get_owned())
+    {
+        std::cout << get_table_style_info(inv.first, inv.second);
+        set_cursor_pos(second_col, cur_cursor_row++);
+    }
+    set_cursor_pos(0, _cursor_row);
 }
 
 void
 BrokerGame::_draw_owned()
 {
-    std::stringstream buffer;
-    std::pair<int, int> term_size = get_term_size();
-    if (term_size.first < 100)
-    {
-        if (_fund->get_owned().size() == 0)
-        {
-            std::cout << "\nYou don't own any investments at the moment\n";
-            _cursor_row += 2;
-            return;
-        }
-
-        std::cout << "\n           Investments you own:\n";
-
-        std::cout << std::left
-               << std::setw(2)  << "n"      << '|'
-               << std::setw(3)  << "Id"     << '|'
-               << std::setw(10) << "Type"   << '|'
-               << std::setw(12) << "Name"   << '|'
-               << std::setw(7)  << "Price"  << '|'
-               << std::setw(6)  << "Profit" << '|'
-               << std::setw(4)  << "Risk" << '\n';
-        std::cout << std::string(2,  '-') << '+'
-               << std::string(3,  '-') << '+'
-               << std::string(10, '-') << '+'
-               << std::string(12, '-') << '+'
-               << std::string(7,  '-') << '+'
-               << std::string(6,  '-') << '+'
-               << std::string(4,  '-') << '\n';
-
-        _cursor_row += 4;
-
-        for (auto& inv: _fund->get_owned())
-        {
-            std::cout << get_table_style_info(inv.first, inv.second);
-            ++_cursor_row;
-        }
-        
-    }
+    if (_tui_mode == SINGLE_COLUMN)
+        _draw_single_column_owned();
     else
-    {
-        int cur_cursor_row = 0;
-        int second_col = 50;
-        set_cursor_pos(second_col, cur_cursor_row++);
-        if (_fund->get_owned().size() == 0)
-        {
-            std::cout << "     You don't own any investments at the moment";
-            set_cursor_pos(0, _cursor_row);
-            return;
-        }
-
-        std::cout << "           Investments you own:";
-        set_cursor_pos(second_col, cur_cursor_row++);
-
-        std::cout << std::left
-                  << std::setw(2)  << "n"      << '|'
-                  << std::setw(3)  << "Id"     << '|'
-                  << std::setw(10) << "Type"   << '|'
-                  << std::setw(12) << "Name"   << '|'
-                  << std::setw(7)  << "Price"  << '|'
-                  << std::setw(6)  << "Profit" << '|'
-                  << std::setw(4)  << "Risk";
-        set_cursor_pos(second_col, cur_cursor_row++);
-        std::cout << std::string(2,  '-') << '+'
-                  << std::string(3,  '-') << '+'
-                  << std::string(10, '-') << '+'
-                  << std::string(12, '-') << '+'
-                  << std::string(7,  '-') << '+'
-                  << std::string(6,  '-') << '+'
-                  << std::string(4,  '-');
-
-        set_cursor_pos(second_col, cur_cursor_row++);
-
-        for (auto& inv: _fund->get_owned())
-        {
-            std::cout << get_table_style_info(inv.first, inv.second);
-            set_cursor_pos(second_col, cur_cursor_row++);
-        }
-        set_cursor_pos(0, _cursor_row);
-    }
-
-    std::cout << buffer.str();
-    buffer.clear();
+        _draw_two_columns_owned();
 }
 
 void
@@ -163,8 +134,6 @@ BrokerGame::_draw_stats()
     _cursor_row += 2;
     std::cout << "Current date: " << _market->get_date().get_formated() << '\n';
     std::cout << "Fund budget: " << _fund->get_budget() << " rub" << '\n';
-
-    
 
     _cursor_row += 2;
 }
@@ -253,43 +222,99 @@ BrokerGame::get_command()
         {
             _draw_easter();
         }
-        else if (cmd_sz == 3 && cmd_split[0] == "buy")
+        else if (cmd_sz >= 1 && cmd_split[0] == "buy")
         {
-            inv_id_t id_to_buy = stoi(cmd_split[1]);
-            int n_to_buy = stoi(cmd_split[2]);
-            investment_ptr_t inv_to_buy = find_by_id(_market->get_available(),
-                                                     id_to_buy);
-
-            if (_fund->buy(inv_to_buy, n_to_buy))
-                error_cmd_msg("Purchase was a success!", set_tem_color_green);
-            else
-                error_cmd_msg("Could make such purchase!", set_tem_color_red);
-
-            draw_interface();
+            _handle_cmd_buy(cmd_split);
         }
         else if (cmd_sz == 3 && cmd_split[0] == "sell")
         {
-            inv_id_t id_to_sell = stoi(cmd_split[1]);
-            int n_to_sell = stoi(cmd_split[2]);
-            investment_ptr_t inv_to_sell = find_by_id(_market->get_available(),
-                                                      id_to_sell);
-
-            if (_fund->sell(inv_to_sell, n_to_sell))
-                error_cmd_msg("Sold successfully!", set_tem_color_green);
-            else
-                error_cmd_msg("You don't own that!", set_tem_color_red);
-
-            draw_interface();
+            _handle_cmd_sell(cmd_split);
         }
         else
         {
-            error_cmd_msg("Unknown command!", set_tem_color_red);
+            after_cmd_msg("Unknown command!", set_tem_color_red);
         }
     }
 }
 
 void
-BrokerGame::error_cmd_msg(std::string msg, void color())
+BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
+{
+    if (cmd.size() != 3)
+    {
+        after_cmd_msg("USAGE: buy [id] [n]", set_tem_color_red);
+        return;
+    }
+
+    inv_id_t id_to_buy;
+    if (!parse<inv_id_t>(cmd[1], id_to_buy))
+    {
+        after_cmd_msg("ERROR: Invalid id", set_tem_color_red);
+        return;
+    }
+
+    int n_to_buy;
+    if (!parse<int>(cmd[2], n_to_buy))
+    {
+        after_cmd_msg("ERROR: Invalid number to buy", set_tem_color_red);
+        return;
+    }
+
+    investment_ptr_t inv_to_buy = find_by_id(_market->get_available(),
+                                             id_to_buy);
+
+    if (n_to_buy + _fund->get_owned()[inv_to_buy] >= 1000)
+    {
+        after_cmd_msg("ERROR: You can not own more than 999 lots", 
+                      set_tem_color_red);
+        return;
+    }
+
+    if (_fund->buy(inv_to_buy, n_to_buy))
+        after_cmd_msg("Purchase was a success!", set_tem_color_green);
+    else
+        after_cmd_msg("ERROR: Could not make such purchase!",
+                       set_tem_color_red);
+
+    draw_interface();
+}
+
+void
+BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
+{
+    if (cmd.size() != 3)
+    {
+        after_cmd_msg("USAGE: sell [id] [n]", set_tem_color_red);
+        return;
+    }
+
+    inv_id_t id_to_sell;
+    if (!parse<inv_id_t>(cmd[1], id_to_sell))
+    {
+        after_cmd_msg("ERROR: Invalid id", set_tem_color_red);
+        return;
+    }
+
+    int n_to_sell;
+    if (!parse<int>(cmd[2], n_to_sell))
+    {
+        after_cmd_msg("ERROR: Invalid number to sell", set_tem_color_red);
+        return;
+    }
+
+    investment_ptr_t inv_to_sell = find_by_id(_market->get_available(),
+                                              id_to_sell);
+
+    if (_fund->sell(inv_to_sell, n_to_sell))
+        after_cmd_msg("Sold successfully!", set_tem_color_green);
+    else
+        after_cmd_msg("ERROR: You don't own that!", set_tem_color_red);
+
+    draw_interface();
+}
+
+void
+BrokerGame::after_cmd_msg(std::string msg, void color())
 {
     // clear msg line
     set_cursor_pos(0, _cursor_row + 1);

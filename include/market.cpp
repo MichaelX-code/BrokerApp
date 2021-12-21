@@ -210,7 +210,7 @@ get_table_style_info(const investment_ptr_t& investment_ptr, int n)
     table_row_buffer << std::left;
 
     if (n > 0)
-        table_row_buffer << std::setw(2) << n << '|';
+        table_row_buffer << std::setw(3) << n << '|';
 
     table_row_buffer << std::setw(3)  << investment_ptr->get_id()     << '|'
                      << std::setw(10) << inv_type                     << '|'

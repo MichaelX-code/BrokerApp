@@ -25,6 +25,8 @@
 #include "date.h"
 #include "list.hpp"
 #include "csv_parser.h"
+    
+#define DECIMAL 10
 
 typedef unsigned long inv_id_t;
 typedef long double   rubles;
@@ -49,5 +51,21 @@ std::vector<std::string> parse_into_words(std::string s);
 void set_tem_color_red();
 void set_tem_color_green();
 void set_tem_color_default();
+
+std::string get_table_header();
+std::string get_table_divider();
+
+// Templates:
+
+template <typename T>
+bool
+parse(const std::string& str, T& value)
+{
+    std::istringstream parser(str);
+    parser >> value;
+
+    return (!parser.fail() && parser.eof());
+}
+
 
 #endif // BROKERAPP_UTILS_H

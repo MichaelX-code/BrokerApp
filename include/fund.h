@@ -10,7 +10,7 @@ public:
     Fund(rubles default_budget);
 
     // Functions: selectors (get)
-    const fund_investments_t& get_owned()   const noexcept;
+    fund_investments_t get_owned();
     double get_budget()                     const noexcept;
 
     // Methods:

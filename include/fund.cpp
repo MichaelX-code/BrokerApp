@@ -4,9 +4,8 @@ Fund::Fund(rubles default_budget) :
 _budget(default_budget)
 {}
 
-const fund_investments_t&
+fund_investments_t
 Fund::get_owned()
-const noexcept
 {
     return _owned;
 }

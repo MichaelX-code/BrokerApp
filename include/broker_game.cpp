@@ -40,16 +40,6 @@ BrokerGame::step()
     _market->step();
     ++_game_duration;
 
-    // TODO: This msg cannot be seen because of screen update after
-    if (get_date().get_month() == 1)
-    {
-        if(_fund->pay_taxes(_tax_rate))
-            after_cmd_msg("INFO: Paid taxes", set_tem_color_orange);
-        else
-            after_cmd_msg("INFO: could not pay taxes: invalid tax rate",    
-                          set_tem_color_orange);
-    }
-
     if (_game_duration == _game_end)
         _status = ENDED;
 }
@@ -74,7 +64,7 @@ BrokerGame::_draw_available()
     std::cout << table_header();
 
     for (auto& investment : _market->get_available())
-        std::cout << get_table_style_info(investment);
+        std::cout << get_table_style_info(investment) << '\n';
 
     _cursor_pos.second = 3 + _market->get_available().size();
 }
@@ -90,11 +80,13 @@ BrokerGame::_draw_single_column_owned()
     }
 
     std::cout << "\n           Investments you own:\n";
-    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header();
-    std::cout << std::string(3,  '-') << '+' << get_table_divider();
+    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
+              << '\n';
+    std::cout << std::string(3,  '-') << '+' << get_table_divider()
+              << '\n';
 
     for (auto& inv : _fund->get_owned())
-        std::cout << get_table_style_info(inv.first, inv.second);
+        std::cout << get_table_style_info(inv.first, inv.second) << '\n';
 
     _cursor_pos.second += 4 + _fund->get_owned().size();
 }
@@ -118,14 +110,16 @@ BrokerGame::_draw_two_columns_owned()
 
     std::cout << "           Investments you own:";
     set_cursor_pos(second_col, cur_cursor_row++);
-    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header();
+    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
+              << '\n';
     set_cursor_pos(second_col, cur_cursor_row++);
-    std::cout << std::string(3,  '-') << '+' << get_table_divider();
+    std::cout << std::string(3,  '-') << '+' << get_table_divider()
+              << '\n';
 
     set_cursor_pos(second_col, cur_cursor_row++);
     for (auto& inv : _fund->get_owned())
     {
-        std::cout << get_table_style_info(inv.first, inv.second);
+        std::cout << get_table_style_info(inv.first, inv.second) << '\n';
         set_cursor_pos(second_col, cur_cursor_row++);
     }
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
@@ -163,6 +157,11 @@ BrokerGame::_draw_quick_stats()
 {
     _cursor_pos.first = 0;
     _cursor_pos.second = 3 + _market->get_available().size();
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+
+    for (int i = 0; i < 4; ++i)
+        std::cout << std::string(get_term_size().first, ' ') << '\n';
+
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
     std::cout << "\nQuick stats:\n";    
     std::cout << "Current date: " << _market->get_date().get_formated() << '\n';
@@ -205,6 +204,7 @@ BrokerGame::_draw_help()
     static list<std::pair<std::string, std::string>> commands_help = {
         { "help", "Opens this help menu" },
         { "next", "End turn and go to the next month" },
+        { "stats", "Opens all stats available in the game" },
         { "buy [id] [n]", "Buy n investment lots with specific id" },
         { "sell [id] [n]", "Sell n investment lots with specific id" },
         { "quit", "End the game immediately" }
@@ -227,6 +227,52 @@ BrokerGame::_draw_help()
     }
     
     set_cursor_pos(0, current_row);
+    std::cout << "\nPress ENTER to go back to the game...\n";
+    getchar();
+    draw_interface();
+}
+
+void
+BrokerGame::_draw_full_stats()
+{
+    clear_terminal();
+    int cursor_x = 0, cursor_y = 0;
+    set_cursor_pos(cursor_x, cursor_y);
+
+    if (_fund->get_owned().size() > 0)
+    {
+        std::cout << "      All stats for your investments:\n";
+
+        std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
+                  << '|' << std::setw(12) << "Price change\n";
+        std::cout << std::string(3,  '-') << '+' << get_table_divider()
+                  << '+' << std::string(12, '-') << '\n';
+
+        for (auto& inv : _fund->get_owned())
+        {
+            std::cout << get_table_style_info(inv.first, inv.second);
+
+            rubles price_change = inv.first->get_price_change();
+
+            std::cout << '|';
+            if (price_change > 0)
+            {
+                set_tem_color_green();
+                std::cout << '+';
+            }
+            else if (price_change < 0)
+            {
+                set_tem_color_red();
+            }
+            std::cout << std::setw(12) << price_change << '\n';
+            set_tem_color_default();
+        }
+    }
+    else
+    {
+        std::cout << "\nYou don't own any investments at the moment\n";
+    }
+
     std::cout << "\nPress ENTER to go back to the game...\n";
     getchar();
     draw_interface();
@@ -260,6 +306,10 @@ BrokerGame::command()
             _status = ENDED;
             clear_terminal();
             return;
+        }
+        else if (cmd_sz == 1 && cmd_split[0] == "stats")
+        {
+            _draw_full_stats();
         }
         else if (cmd_sz == 1 && cmd_split[0] == "easter")
         {
@@ -350,7 +400,7 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
     investment_ptr_t inv_to_sell = find_by_id(_market->get_available(),
                                               id_to_sell);
 
-    if (_fund->sell(inv_to_sell, n_to_sell))
+    if (_fund->sell(inv_to_sell, n_to_sell, _tax_rate))
         after_cmd_msg("Sold successfully!", set_tem_color_green);
     else
         after_cmd_msg("ERROR: You don't own that!", set_tem_color_red);
@@ -381,6 +431,7 @@ BrokerGame::after_cmd_msg(std::string msg, void color())
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
+// TODO: Implement end screen
 void
 BrokerGame::end()
 {
@@ -391,7 +442,7 @@ void
 BrokerGame::_draw_easter()
 {
     clear_terminal();
-    char hex[] = {
+    char decimal[] = {
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
 32,32,32,44,49,44,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
@@ -443,7 +494,7 @@ BrokerGame::_draw_easter()
 44,44,44,44,44,44,44,58,58,58,59,59,58,44,44,44,44,44,58,41};
 
     for (int i = 0; i < 1228; ++i)
-        std::cout << (char) hex[i];
+        std::cout << (char) decimal[i];
 
     std::cout << "\n\nPress ENTER to go back to the game...\n";
     getchar();

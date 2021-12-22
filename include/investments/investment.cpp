@@ -4,7 +4,7 @@
 
 Investment::Investment(std::string name, rubles price,
                        double profit, double risk) :
-_name(name), _price(price), _profit(profit), _risk(risk)
+_name(name), _initial_price(price), _price(price), _profit(profit), _risk(risk)
 {
     if (risk < 0 || 1 <= risk)
     {
@@ -27,35 +27,42 @@ inv_id_t
 Investment::get_id()
 const noexcept
 {
-    return this->_id;
+    return _id;
 }
 
 double
 Investment::get_risk()
 const noexcept
 {
-    return this->_risk;
+    return _risk;
 }
 
 rubles
 Investment::get_price()
 const noexcept
 {
-    return this->_price;
+    return _price;
+}
+
+rubles
+Investment::get_price_change()
+const noexcept
+{
+    return _price - _initial_price;
 }
 
 double
 Investment::get_profit()
 const noexcept
 {
-    return this->_profit;
+    return _profit;
 }
 
 std::string
 Investment::get_name()
 const
 {
-    return this->_name;
+    return _name;
 }
 
 void
@@ -66,7 +73,7 @@ Investment::set_price(rubles price)
         std::cerr << "ERROR: invalid investment price: " << price
                   << ". Investment price has to be >= 0\n";
     }
-    this->_price = price;
+    _price = price;
 }
 
 void
@@ -77,7 +84,7 @@ Investment::set_profit(double profit)
         std::cerr << "ERROR: invalid investment profit: " << profit
                   << ". Investment profit has to be >= 0\n";
     }
-    this->_profit = profit;
+    _profit = profit;
 }
 
 void
@@ -88,7 +95,7 @@ Investment::set_risk(double risk)
         std::cerr << "ERROR: invalid investment risk: " << risk
                   << ". Investment risk has to be [0; 1)\n";
     }
-    this->_risk = risk;
+    _risk = risk;
 }
 
 // Operators overloads:

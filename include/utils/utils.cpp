@@ -109,17 +109,6 @@ set_tem_color_red()
 #endif
 }
 
-void
-set_tem_color_orange()
-{
-#ifdef _WIN32
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
-#else
-    std::cout << "\033[33m";
-#endif
-}
-
 std::string
 get_table_header()
 {
@@ -130,7 +119,7 @@ get_table_header()
            << std::setw(12) << "Name"   << '|'
            << std::setw(7)  << "Price"  << '|'
            << std::setw(6)  << "Profit" << '|'
-           << std::setw(4)  << "Risk" << '\n';
+           << std::setw(4)  << "Risk";
 
     return buffer.str();
 }
@@ -144,7 +133,7 @@ get_table_divider()
            << std::string(12, '-') << '+'
            << std::string(7,  '-') << '+'
            << std::string(6,  '-') << '+'
-           << std::string(4,  '-') << '\n';
+           << std::string(4,  '-');
 
 
     return buffer.str();

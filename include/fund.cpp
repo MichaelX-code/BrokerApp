@@ -1,7 +1,7 @@
 #include "fund.h"
 
 Fund::Fund(rubles default_budget) :
-_budget(default_budget), _start_budget(default_budget)
+_budget(default_budget), _initial_budget(default_budget)
 {}
 
 fund_investments_t
@@ -29,7 +29,7 @@ Fund::buy(investment_ptr_t investment_ptr, int n)
 }
 
 bool
-Fund::sell(investment_ptr_t investment_ptr, int n)
+Fund::sell(investment_ptr_t investment_ptr, int n, double _tax_rate)
 {
     auto inv_p = _owned.find(investment_ptr);
 
@@ -44,6 +44,10 @@ Fund::sell(investment_ptr_t investment_ptr, int n)
         return false;
 
     _budget += investment_ptr->get_price() * n;
+
+    if (investment_ptr->get_price_change() > 0)
+        _budget -= investment_ptr->get_price_change() * _tax_rate;
+
     return true;
 }
 
@@ -58,17 +62,5 @@ const
     rubles _cur_wealth = std::accumulate(_owned.begin(), _owned.end(), _budget,
                                          each);
     
-    return _cur_wealth - _start_budget;
-}
-
-bool
-Fund::pay_taxes(double tax_rate)
-{
-    if (tax_rate < 0 || tax_rate > 1)
-        return false;
-
-    if (calc_earnings() > 0)
-        _budget -= calc_earnings() * tax_rate;    
-    
-    return true;
+    return _cur_wealth - _initial_budget;
 }

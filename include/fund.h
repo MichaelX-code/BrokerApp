@@ -15,13 +15,12 @@ public:
 
     // Methods:
     bool buy(investment_ptr_t investment_ptr, int n);
-    bool sell(investment_ptr_t investment_ptr, int n);
+    bool sell(investment_ptr_t investment_ptr, int n, double tax_rate);
     rubles calc_earnings() const;
-    bool pay_taxes(double tax_rate);
 private:
     fund_investments_t _owned;
     rubles _budget;
-    rubles _start_budget;
+    rubles _initial_budget;
 };
 
 #endif // BROKERAPP_FUND_H

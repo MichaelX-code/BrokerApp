@@ -15,11 +15,11 @@ public:
     // Functions: selectors (get)
     inv_id_t get_id()           const noexcept;
     rubles get_price()          const noexcept;
+    rubles get_price_change()   const noexcept;
     double get_risk()           const noexcept;
     double get_profit()         const noexcept;
     std::string get_name()      const;
 
-    
     // Functions: modifiers (set)
     void set_price(rubles price);
     void set_profit(double profit);
@@ -32,6 +32,7 @@ public:
 protected:
     // Members:
     const std::string _name;
+    const rubles _initial_price;
     rubles _price;
     double _profit;
     double _risk;

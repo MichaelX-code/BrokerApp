@@ -52,6 +52,7 @@ private:
     void _clear_second_column(int second_col);
     void _draw_quick_stats();
     void _draw_help();
+    void _draw_full_stats();
     void _draw_easter();
     void _draw_console();
 

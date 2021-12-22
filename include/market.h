@@ -34,6 +34,6 @@ private:
 std::string get_inv_type(const investment_ptr_t& investment_ptr);
 std::string get_csv_style_info(const investment_ptr_t& investment_ptr);
 std::string get_table_style_info(const investment_ptr_t& investment_ptr,
-                                 int n = 0);
+                                 int n = 0, bool with_price_change = false);
 
 #endif // BROKERAPP_MARKET_H

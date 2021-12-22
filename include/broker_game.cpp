@@ -134,7 +134,7 @@ BrokerGame::_clear_second_column(int second_col)
     size_t n_lines = _market->get_available().size();
     size_t n_col = get_term_size().first - second_col;
 
-    for (int i = 0; i < n_lines; ++i)
+    for (size_t i = 0; i < n_lines; ++i)
     {
         std::cout << std::string(n_col, ' ');
         set_cursor_pos(second_col, cur_cursor_row++);

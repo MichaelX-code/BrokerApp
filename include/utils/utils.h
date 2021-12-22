@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <numeric>
 #include <stdio.h>
+#include <memory>
 
 #ifdef _WIN32
     #include <Windows.h>

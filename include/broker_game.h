@@ -23,10 +23,8 @@ public:
     void step();
     void draw_interface();
     void command();
-    void end();
-
-    // Operators overloads:
-    operator bool () const;
+    void end_screen();
+    bool is_not_over();
 private:
     Market * _market;
     Fund   * _fund;
@@ -53,5 +51,9 @@ private:
 
     void after_cmd_msg(std::string msg, void color());
 };
+
+typedef std::unique_ptr<BrokerGame> game_ptr_t;
+
+game_ptr_t game_init();
 
 #endif // BROKERAPP_BROKER_GAME_H

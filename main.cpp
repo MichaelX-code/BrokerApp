@@ -5,18 +5,15 @@ main(void)
 {
     fix_term_encoding();
 
-    size_t game_duration_in_months = 24;
-    rubles starting_fund_budget    = 500000;
+    auto game = game_init();
 
-    BrokerGame game(game_duration_in_months, starting_fund_budget);
-
-    while(game)
+    while(game->is_not_over())
     {
-        game.draw_interface();
-        game.command();
+        game->draw_interface();
+        game->command();
     }
 
-    game.end();
+    game->end_screen();
 
     return (EXIT_SUCCESS);
 }

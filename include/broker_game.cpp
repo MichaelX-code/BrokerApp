@@ -1,5 +1,42 @@
 #include "broker_game.h"
 
+game_ptr_t
+game_init()
+{
+    clear_terminal();
+    std::string _game_length, _initial_budget;
+    size_t game_length;
+    rubles initial_budget;
+    std::cout << "Введите предварительные настройки игры\n\n";
+
+    do {
+        set_cursor_pos(0, 2);
+        std::cout << std::string(get_term_size().first, ' ') << '\r';
+        std::cout << "Продолжительность игры в месяцах: ";
+        std::cin >> _game_length;
+    } while (!parse<size_t>(_game_length, game_length));
+
+    do {
+        set_cursor_pos(0, 3);
+        std::cout << std::string(get_term_size().first, ' ') << '\r';
+        std::cout << "Изначальный бюджет фонда в рублях: ";
+        std::cin >> _initial_budget;
+    } while (!parse<rubles>(_initial_budget, initial_budget));
+
+    getchar();
+
+    if (get_term_size().first < 100)
+    {
+        set_tem_color_red();
+        std::cout << "\nПРЕДУПРЕЖДЕНИЕ: эта игра расчитана для работы в терминале с шириной не менее 100 символов: измените размер окна для наилучшего результата";
+        set_tem_color_default();
+        std::cout << "\n\nНажмите ENTER, для начала игры...\n";
+        getchar();
+    }
+
+    return game_ptr_t(new BrokerGame(game_length, initial_budget));
+}
+
 // Constructors:
 
 BrokerGame::BrokerGame(size_t game_end, rubles default_fund_budget) :
@@ -44,12 +81,6 @@ BrokerGame::step()
         _status = game_status::ENDED;
 }
 
-BrokerGame::operator bool()
-const
-{
-    return (_status == game_status::PLAYING);
-}
-
 void
 BrokerGame::_draw_available()
 {
@@ -88,9 +119,7 @@ BrokerGame::_draw_owned()
     _clear_second_column(second_col);
     set_cursor_pos(second_col, cur_cursor_row++);
 
-    auto fix_cursor_pos = [](std::pair<int, int>& _cursor_pos,
-                             Market * _market)
-    {
+    auto fix_cursor_pos = [](pos_t& _cursor_pos, Market * _market) {
         _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
         set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
     };
@@ -175,7 +204,7 @@ BrokerGame::_draw_help()
         { "stats", "Открыть страницу с полной статистикой" },
         { "buy [id] [n]", "Купить n инвестиций определенного id" },
         { "sell [id] [n]", "Продать n инвестиций определенного id" },
-        { "quit", "Закончить игру сейчас" }
+        { "end", "Закончить игру сейчас" }
     };
 
     int offset = 20;
@@ -269,7 +298,7 @@ BrokerGame::command()
             step();
             return;
         }
-        else if (cmd_sz == 1 && cmd_split[0] == "quit")
+        else if (cmd_sz == 1 && cmd_split[0] == "end")
         {
             _status = game_status::ENDED;
             clear_terminal();
@@ -402,9 +431,15 @@ BrokerGame::after_cmd_msg(std::string msg, void color())
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
+bool
+BrokerGame::is_not_over()
+{
+    return (_status == game_status::PLAYING);
+}
+
 // TODO: Implement end screen
 void
-BrokerGame::end()
+BrokerGame::end_screen()
 {
 
 }

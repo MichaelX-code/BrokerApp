@@ -85,5 +85,9 @@ Utility classes:
 
 ## To-do
 
+- [x] Implement welcome screen
+- [ ] Improve full statistic page: display earnings from each category
+- [ ] Implement end screen
+
 - [ ] Implement logger class which writes everything into separate file
 - [ ] Improve data set to be more realistic

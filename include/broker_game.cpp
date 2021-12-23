@@ -59,8 +59,7 @@ BrokerGame::_pick_tui_mode()
 void
 BrokerGame::_draw_available()
 {
-    set_cursor_pos(0, 0);
-    std::cout << "   Investments available on the market:\n";
+    std::cout << "        Инвестиции, доступные на рынке:\n";
     std::cout << table_header();
 
     for (auto& investment : _market->get_available())
@@ -72,14 +71,17 @@ BrokerGame::_draw_available()
 void
 BrokerGame::_draw_single_column_owned()
 {
+    _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+
     if (_fund->get_owned().size() == 0)
     {
-        std::cout << "\nYou don't own any investments at the moment\n";
+        std::cout << "\nФонд не владеет никакими инвестициями\n";
         _cursor_pos.second += 2;
         return;
     }
 
-    std::cout << "\n           Investments you own:\n";
+    std::cout << "\n           Инвестиции фонда:\n";
     std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
               << '\n';
     std::cout << std::string(3,  '-') << '+' << get_table_divider()
@@ -103,12 +105,12 @@ BrokerGame::_draw_two_columns_owned()
 
     if (_fund->get_owned().size() == 0)
     {
-        std::cout << "     You don't own any investments at the moment";
+        std::cout << "        Фонд не владеет никакими инвестициями\n";
         set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
         return;
     }
 
-    std::cout << "           Investments you own:";
+    std::cout << "                   Инвестиции фонда:\n";
     set_cursor_pos(second_col, cur_cursor_row++);
     std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
               << '\n';
@@ -122,6 +124,7 @@ BrokerGame::_draw_two_columns_owned()
         std::cout << get_table_style_info(inv.first, inv.second) << '\n';
         set_cursor_pos(second_col, cur_cursor_row++);
     }
+    _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
@@ -155,25 +158,23 @@ BrokerGame::_draw_owned()
 void
 BrokerGame::_draw_quick_stats()
 {
-    _cursor_pos.first = 0;
-    _cursor_pos.second = 3 + _market->get_available().size();
-    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
-
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 5; ++i)
         std::cout << std::string(get_term_size().first, ' ') << '\n';
 
+    _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
-    std::cout << "\nQuick stats:\n";    
-    std::cout << "Current date: " << _market->get_date().get_formated() << '\n';
-    std::cout << "Fund budget: " << _fund->get_budget() << " rub" << '\n';
+    std::cout << "\nКраткая статистика:\n";    
+    std::cout << "Внутриигровая дата: " << _market->get_date().get_formated() 
+                                        << '\n';
+    std::cout << "Баланс фонда: " << _fund->get_budget() << " руб" << '\n';
 
-    std::cout << "Total earnings: "; 
+    std::cout << "Общий доход: "; 
     if (_fund->calc_earnings() > 0)
         set_tem_color_green();
     else if (_fund->calc_earnings() < 0)
         set_tem_color_red();
 
-    std::cout << _fund->calc_earnings() << " rub" << '\n';
+    std::cout << _fund->calc_earnings() << " руб" << '\n';
     set_tem_color_default();
 
     _cursor_pos.second += 5;
@@ -182,7 +183,9 @@ BrokerGame::_draw_quick_stats()
 void
 BrokerGame::_draw_console()
 {
-    std::cout << "\nEnter a command (\"help\" to see all commands):\n";
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+
+    std::cout << "\nВведите команду (\"help\" для просмотра всех команд):\n";
     std::cout << "> ";
     _cursor_pos.first = 2;
     _cursor_pos.second += 2;
@@ -202,20 +205,20 @@ void
 BrokerGame::_draw_help()
 {
     static list<std::pair<std::string, std::string>> commands_help = {
-        { "help", "Opens this help menu" },
-        { "next", "End turn and go to the next month" },
-        { "stats", "Opens all stats available in the game" },
-        { "buy [id] [n]", "Buy n investment lots with specific id" },
-        { "sell [id] [n]", "Sell n investment lots with specific id" },
-        { "quit", "End the game immediately" }
+        { "help", "Открыть меню помощи" },
+        { "next", "Закончить ход и перейти к следующему месяцу" },
+        { "stats", "Открыть страницу с полной статистикой" },
+        { "buy [id] [n]", "Купить n инвестиций определенного id" },
+        { "sell [id] [n]", "Продать n инвестиций определенного id" },
+        { "quit", "Закончить игру сейчас" }
     };
 
     int offset = 20;
 
     clear_terminal();
-    std::cout << "Command";
+    std::cout << "Команда";
     set_cursor_pos(offset, 0);
-    std::cout << "Description";
+    std::cout << "Описание";
 
     int current_row = 2;
     for (auto& command : commands_help)
@@ -227,7 +230,7 @@ BrokerGame::_draw_help()
     }
     
     set_cursor_pos(0, current_row);
-    std::cout << "\nPress ENTER to go back to the game...\n";
+    std::cout << "\nНажмите ENTER, чтобы вернуться к игре...\n";
     getchar();
     draw_interface();
 }
@@ -241,12 +244,12 @@ BrokerGame::_draw_full_stats()
 
     if (_fund->get_owned().size() > 0)
     {
-        std::cout << "      All stats for your investments:\n";
+        std::cout << "      Статистика по инвестициям фонда:\n";
 
         std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
-                  << '|' << std::setw(12) << "Price change\n";
+                  << '|' << std::setw(25) << "Изменение цен\n";
         std::cout << std::string(3,  '-') << '+' << get_table_divider()
-                  << '+' << std::string(12, '-') << '\n';
+                  << '+' << std::string(13, '-') << '\n';
 
         for (auto& inv : _fund->get_owned())
         {
@@ -270,10 +273,10 @@ BrokerGame::_draw_full_stats()
     }
     else
     {
-        std::cout << "\nYou don't own any investments at the moment\n";
+        std::cout << "\nФонд не владеет никакими инвестициями\n";
     }
 
-    std::cout << "\nPress ENTER to go back to the game...\n";
+    std::cout << "\nНажмите ENTER, чтобы вернуться к игре...\n";
     getchar();
     draw_interface();
 }
@@ -325,7 +328,7 @@ BrokerGame::command()
         }
         else
         {
-            after_cmd_msg("Unknown command!", set_tem_color_red);
+            after_cmd_msg("Неизвестная команда!", set_tem_color_red);
         }
     }
 }
@@ -335,21 +338,22 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
 {
     if (cmd.size() != 3)
     {
-        after_cmd_msg("USAGE: buy [id] [n]", set_tem_color_red);
+        after_cmd_msg("Использование: buy [id] [n]", set_tem_color_red);
         return;
     }
 
     inv_id_t id_to_buy;
     if (!parse<inv_id_t>(cmd[1], id_to_buy))
     {
-        after_cmd_msg("ERROR: Invalid id", set_tem_color_red);
+        after_cmd_msg("Ошибка: Неверный id", set_tem_color_red);
         return;
     }
 
     int n_to_buy;
     if (!parse<int>(cmd[2], n_to_buy))
     {
-        after_cmd_msg("ERROR: Invalid number to buy", set_tem_color_red);
+        after_cmd_msg("Ошибка: Неверное количество для покупки", 
+                      set_tem_color_red);
         return;
     }
 
@@ -358,15 +362,15 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
 
     if (n_to_buy + _fund->get_owned()[inv_to_buy] >= 1000)
     {
-        after_cmd_msg("ERROR: You can not own more than 999 lots", 
+        after_cmd_msg("Ошибка: Максимаольное количество лотов во владении 999", 
                       set_tem_color_red);
         return;
     }
 
     if (_fund->buy(inv_to_buy, n_to_buy))
-        after_cmd_msg("Purchase was a success!", set_tem_color_green);
+        after_cmd_msg("Успешная покупка!", set_tem_color_green);
     else
-        after_cmd_msg("ERROR: Could not make such purchase!",
+        after_cmd_msg("Ошибка: Невозможно совершить покупку!",
                        set_tem_color_red);
 
     _draw_owned();
@@ -379,21 +383,22 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
 {
     if (cmd.size() != 3)
     {
-        after_cmd_msg("USAGE: sell [id] [n]", set_tem_color_red);
+        after_cmd_msg("Использование: sell [id] [n]", set_tem_color_red);
         return;
     }
 
     inv_id_t id_to_sell;
     if (!parse<inv_id_t>(cmd[1], id_to_sell))
     {
-        after_cmd_msg("ERROR: Invalid id", set_tem_color_red);
+        after_cmd_msg("Ошибка: Неверный id", set_tem_color_red);
         return;
     }
 
     int n_to_sell;
     if (!parse<int>(cmd[2], n_to_sell))
     {
-        after_cmd_msg("ERROR: Invalid number to sell", set_tem_color_red);
+        after_cmd_msg("Ошибка: Неверное количество для продажи", 
+                      set_tem_color_red);
         return;
     }
 
@@ -401,9 +406,10 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
                                               id_to_sell);
 
     if (_fund->sell(inv_to_sell, n_to_sell, _tax_rate))
-        after_cmd_msg("Sold successfully!", set_tem_color_green);
+        after_cmd_msg("Успешная продажа!", set_tem_color_green);
     else
-        after_cmd_msg("ERROR: You don't own that!", set_tem_color_red);
+        after_cmd_msg("Ошибка: Фонд не владеет таким количеством акций!",       
+                      set_tem_color_red);
 
     _draw_owned();
     _draw_quick_stats();
@@ -496,7 +502,7 @@ BrokerGame::_draw_easter()
     for (int i = 0; i < 1228; ++i)
         std::cout << (char) decimal[i];
 
-    std::cout << "\n\nPress ENTER to go back to the game...\n";
+    std::cout << "\n\nНажмите ENTER, чтобы вернуться к игре...\n";
     getchar();
     draw_interface();
 }

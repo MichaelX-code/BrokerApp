@@ -7,11 +7,12 @@
 Stock,Apple,12500,1.02,0.04
 Stock,Alphabet,2867.5,1.03,0.06
 Stock,Kodak,5.16,1.01,0.02
+Stock,Gazprom,341.7,0.98,0.05
 
 # Obligations:
 Obligation,VK publication 1,1028,1.01,0.02,01.11.2024
 Obligation,VK publication 2,1028,1.01,0.02,01.02.2025
-Obligation,Gazprom,1028,1.02,0.08,01.06.2025
+Obligation,Gazprom,1028,1,0.08,01.06.2025
 Obligation,GDLK,71961,1.05,0.12,01.06.2027
 
 # Metals:

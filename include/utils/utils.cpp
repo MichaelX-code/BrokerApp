@@ -114,12 +114,12 @@ get_table_header()
 {
     std::stringstream buffer;
     buffer << std::left
-           << std::setw(3)  << "Id"     << '|'
-           << std::setw(10) << "Type"   << '|'
-           << std::setw(12) << "Name"   << '|'
-           << std::setw(7)  << "Price"  << '|'
-           << std::setw(6)  << "Profit" << '|'
-           << std::setw(4)  << "Risk";
+           << std::setw(3)  << "id"       << '|'
+           << std::setw(13) << "Тип"      << '|'
+           << std::setw(20) << "Название" << '|'
+           << std::setw(11) << "Цена"     << '|'
+           << std::setw(11) << "Доход"    << '|'
+           << std::setw(8)  << "Риск";
 
     return buffer.str();
 }

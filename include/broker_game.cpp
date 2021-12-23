@@ -240,9 +240,14 @@ BrokerGame::_draw_full_stats()
     int cursor_x = 0, cursor_y = 0;
     set_cursor_pos(cursor_x, cursor_y);
 
+    rubles total_stocks = 0;
+    rubles total_obligations = 0;
+    rubles total_metals = 0;
+    rubles total_currencies = 0;
+
     if (_fund->get_owned().size() > 0)
     {
-        std::cout << "      Статистика по инвестициям фонда:\n";
+        std::cout << "             Статистика по инвестициям фонда:\n";
 
         std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
                   << '|' << std::setw(25) << "Изменение цен\n";
@@ -267,12 +272,50 @@ BrokerGame::_draw_full_stats()
             }
             std::cout << std::setw(12) << price_change << '\n';
             set_tem_color_default();
+
+            std::string inv_type = get_inv_type(inv.first);
+
+            if (inv_type == "Stock")
+                total_stocks += price_change;
+            else if (inv_type == "Obligation")
+                total_obligations += price_change;
+            else if (inv_type == "Metal")
+                total_metals += price_change;
+            else if (inv_type == "Currency")
+                total_currencies += price_change;
         }
     }
     else
     {
         std::cout << "\nФонд не владеет никакими инвестициями\n";
     }
+
+    std::cout << "\nСтатистика по категориям:\n";
+
+    auto pick_color = [](rubles price_change) {
+        if (price_change > 0)
+            set_tem_color_green();
+        else if (price_change < 0)
+            set_tem_color_red();
+    };
+
+    auto print_price_change = [&](rubles price_change) {
+        pick_color(price_change);
+        if (price_change > 0)
+            std::cout << '+';
+        std::cout << price_change << '\n';
+        set_tem_color_default();
+    };
+
+    size_t offset = 16;
+    std::cout << std::setw(offset) << "Stocks: ";
+    print_price_change(total_stocks);
+    std::cout << std::setw(offset) << "Obligations: ";
+    print_price_change(total_obligations);
+    std::cout << std::setw(offset) << "Metals: ";
+    print_price_change(total_metals);
+    std::cout << std::setw(offset) << "Currencies: ";
+    print_price_change(total_currencies);
 
     std::cout << "\nНажмите ENTER, чтобы вернуться к игре...\n";
     getchar();

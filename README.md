@@ -87,7 +87,7 @@ Utility classes:
 
 - [x] Implement welcome screen
 - [x] Implement ability to add money to the fund during the game
-- [ ] Improve full statistic page: display earnings from each category
+- [x] Improve full statistic page: display earnings from each category
 - [ ] Implement end screen
 
 - [ ] Implement logger class which writes everything into separate file

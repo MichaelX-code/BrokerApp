@@ -70,7 +70,7 @@ get_term_size()
 }
 
 std::vector<std::string>
-parse_into_words(std::string s)
+parse_into_words(const std::string& s)
 {
     std::stringstream stream(s);
     std::string word;

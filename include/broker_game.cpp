@@ -1,5 +1,7 @@
 #include "broker_game.h"
 
+#include <memory>
+
 game_ptr_t
 game_init()
 {
@@ -34,7 +36,7 @@ game_init()
         getchar();
     }
 
-    return game_ptr_t(new BrokerGame(game_length, initial_budget));
+    return std::make_unique<BrokerGame>(game_length, initial_budget);
 }
 
 // Constructors:
@@ -88,7 +90,7 @@ BrokerGame::_draw_available()
     std::cout << table_header();
 
     for (auto& investment : _market->get_available())
-        std::cout << get_table_style_info(investment) << '\n';
+        std::cout << get_table_style_info(investment, 0) << '\n';
 
     _cursor_pos.second = 3 + _market->get_available().size();
 }
@@ -124,7 +126,7 @@ BrokerGame::_draw_owned()
         set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
     };
 
-    if (_fund->get_owned().size() == 0)
+    if (_fund->get_owned().empty())
     {
         std::cout << "        Фонд не владеет никакими инвестициями\n";
         fix_cursor_pos(_cursor_pos, _market);
@@ -245,7 +247,7 @@ BrokerGame::_draw_full_stats()
     rubles total_metals = 0;
     rubles total_currencies = 0;
 
-    if (_fund->get_owned().size() > 0)
+    if (!_fund->get_owned().empty())
     {
         std::cout << "             Статистика по инвестициям фонда:\n";
 
@@ -307,7 +309,8 @@ BrokerGame::_draw_full_stats()
         set_tem_color_default();
     };
 
-    size_t offset = 16;
+    int offset = 16;
+    std::cout << std::left;
     std::cout << std::setw(offset) << "Stocks: ";
     print_price_change(total_stocks);
     std::cout << std::setw(offset) << "Obligations: ";
@@ -491,7 +494,7 @@ BrokerGame::_handle_cmd_add(const std::vector<std::string>& cmd)
 }
 
 void
-BrokerGame::after_cmd_msg(std::string msg, void color())
+BrokerGame::after_cmd_msg(const std::string& msg, void color())
 {
     // clear msg line
     set_cursor_pos(0, _cursor_pos.second + 1);
@@ -579,8 +582,8 @@ BrokerGame::_draw_easter()
 32,32,32,32,32,32,32,32,32,32,32,32,46,59,59,58,44,44,46,44,44,44,44,44,44,44,
 44,44,44,44,44,44,44,58,58,58,59,59,58,44,44,44,44,44,58,41};
 
-    for (int i = 0; i < 1228; ++i)
-        std::cout << (char) decimal[i];
+    for (char i : decimal)
+        std::cout << (char) i;
 
     std::cout << "\n\nНажмите ENTER, чтобы вернуться к игре...\n";
     getchar();

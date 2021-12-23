@@ -26,7 +26,7 @@ public:
     void set_risk(double risk);
 
     // Operators overloads:
-    bool operator == (const Investment& other);
+    bool operator == (const Investment& other) const;
     bool operator != (const Investment& other);
 
 protected:
@@ -36,14 +36,13 @@ protected:
     rubles _price;
     double _profit;
     double _risk;
-    inv_id_t _id;
-    rubles _diff;
+    inv_id_t _id{};
 };
 
 typedef std::shared_ptr<Investment> investment_ptr_t;
 typedef list<investment_ptr_t> investments_list_t;
 typedef std::unordered_map<investment_ptr_t, int> fund_investments_t;
 
-investment_ptr_t find_by_id(investments_list_t invs, inv_id_t id);
+investment_ptr_t find_by_id(const investments_list_t& invs, inv_id_t id);
 
 #endif // BROKERAPP_INVESTMENTS_INVESTMENT_H

@@ -9,7 +9,7 @@ class BrokerGame
 {
 public:
     // Constructor:
-    BrokerGame(size_t game_end = 12, rubles default_fund_budget = 1000000);
+    explicit BrokerGame(size_t game_end = 12, rubles default_fund_budget = 1000000);
 
     // Destructor:
     ~BrokerGame();
@@ -17,7 +17,7 @@ public:
     // Functions: selectors (get)
     Market * get_market();
     Fund   * get_fund();
-    date_t get_date()              const;
+    date_t get_date() const;
 
     // Methods:
     void step();
@@ -49,7 +49,7 @@ private:
     void _handle_cmd_buy(const std::vector<std::string>& cmd);
     void _handle_cmd_sell(const std::vector<std::string>& cmd);
     void _handle_cmd_add(const std::vector<std::string>& cmd);
-    void after_cmd_msg(std::string msg, void color());
+    void after_cmd_msg(const std::string& msg, void color());
 };
 
 typedef std::unique_ptr<BrokerGame> game_ptr_t;

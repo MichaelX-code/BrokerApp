@@ -2,12 +2,12 @@
 
 // Constructors:
 
-csv_parser_t::csv_parser_t(std::string file_path) :
+csv_parser_t::csv_parser_t(const std::string& file_path) :
 _file_path(file_path), _fstream(file_path)
 {
     if (!_fstream.is_open())
-        throw new std::runtime_error("ERROR: Could not open file: \"" +
-                                     file_path + "\"\n");   
+        throw std::runtime_error("ERROR: Could not open file: \"" +
+                                 file_path + "\"\n");
 }
 
 // Destructors:
@@ -68,7 +68,7 @@ csv_parser_t::next_line()
 }
 
 void
-csv_parser_t::blame_last_line(std::string msg)
+csv_parser_t::blame_last_line(const std::string& msg)
 {
     std::cerr << "ERROR: " << msg << ": \"" << _last_line << "\"\n";
     exit(EXIT_FAILURE);

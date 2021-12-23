@@ -7,15 +7,15 @@ class Fund
 {
 public:
     // Constructor:
-    Fund(rubles default_budget);
+    explicit Fund(rubles default_budget);
 
     // Functions: selectors (get)
     fund_investments_t get_owned();
     rubles get_budget() const noexcept;
 
     // Methods:
-    bool buy(investment_ptr_t investment_ptr, int n);
-    bool sell(investment_ptr_t investment_ptr, int n, double tax_rate);
+    bool buy(const investment_ptr_t& investment_ptr, int n);
+    bool sell(const investment_ptr_t& investment_ptr, int n, double tax_rate);
     void add_to_budget(rubles amount);
     rubles calc_earnings() const;
 private:

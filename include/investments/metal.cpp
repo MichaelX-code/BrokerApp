@@ -3,5 +3,5 @@
 Metal::Metal(std::string name, rubles price, double profit, double risk) :
 Investment(name, price, profit, risk)
 {
-    this->_id = 3e2 + iota();
+    this->_id = 300 + iota();
 }

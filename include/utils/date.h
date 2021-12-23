@@ -8,7 +8,7 @@ class date_t
 public:
     // Constructors:
     date_t();
-    date_t(std::string date);
+    date_t(const std::string& date);
 
     // Functions: selectors (get)
     unsigned get_day() const noexcept;
@@ -34,9 +34,9 @@ private:
     unsigned _year, _month, _day;
 
     // Helpful private methods:
-    inline bool _check_valid();
-    inline unsigned _end_of_month(unsigned int m, unsigned int y);
-    inline bool _is_leap(unsigned int y);
+    inline bool _check_valid() const;
+    static inline unsigned _end_of_month(unsigned int m, unsigned int y);
+    static inline bool _is_leap(unsigned int y);
 };
 
 #endif // BROKERAPP_UTILS_DATE_H

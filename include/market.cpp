@@ -16,7 +16,7 @@ Market::Market()
         std::vector<std::string> inv_info = csv_parser.next_line();
 
         // skip empty lines
-        if (inv_info.size() == 0)
+        if (inv_info.empty())
             continue;
 
         if (inv_info[0] == "Stock")
@@ -75,12 +75,12 @@ Market::Market()
         }
         else
         {
-            csv_parser.blame_last_line("Unkown Investment type");
+            csv_parser.blame_last_line("Unknown Investment type");
         }
     }
 
     // generate a seed for rand() in future
-    srand(std::time(0));
+    srand(std::time(NULL));
 }
 
 // Functions: selectors (get)
@@ -151,24 +151,19 @@ get_inv_type(const investment_ptr_t& investment_ptr)
 {
     std::string _inv_type;
 
-    stock_ptr_t         stock(nullptr);
-    obligation_ptr_t    obl(nullptr);
-    metal_ptr_t         metal(nullptr);
-    currency_ptr_t      cur(nullptr);
-
-    if ((stock = std::dynamic_pointer_cast<Stock>(investment_ptr)))
+    if (std::dynamic_pointer_cast<Stock>(investment_ptr))
         _inv_type = "Stock";
-    else if ((obl = std::dynamic_pointer_cast<Obligation>(investment_ptr)))
+    else if (std::dynamic_pointer_cast<Obligation>(investment_ptr))
         _inv_type = "Obligation";
-    else if ((metal = std::dynamic_pointer_cast<Metal>(investment_ptr)))
+    else if (std::dynamic_pointer_cast<Metal>(investment_ptr))
         _inv_type = "Metal";
-    else if ((cur = std::dynamic_pointer_cast<Currency>(investment_ptr)))
+    else if (std::dynamic_pointer_cast<Currency>(investment_ptr))
         _inv_type = "Currency";
 
     return _inv_type;
 }
 
-std::string
+[[maybe_unused]] std::string
 get_csv_style_info(const investment_ptr_t& investment_ptr)
 {
     std::stringstream info_stream;
@@ -179,27 +174,23 @@ get_csv_style_info(const investment_ptr_t& investment_ptr)
 
     std::string csv_style_info(info_stream.str());
 
-    stock_ptr_t         stock(nullptr);
-    obligation_ptr_t    obl(nullptr);
-    metal_ptr_t         metal(nullptr);
-    currency_ptr_t      cur(nullptr);
+    obligation_ptr_t obl(nullptr);
 
-    if ((stock = std::dynamic_pointer_cast<Stock>(investment_ptr)))
+    if (std::dynamic_pointer_cast<Stock>(investment_ptr))
         csv_style_info = "Stock" + csv_style_info;
     else if ((obl = std::dynamic_pointer_cast<Obligation>(investment_ptr)))
         csv_style_info = "Obligation" + csv_style_info +
                          obl->get_expiry_date().get_formated();
-    else if ((metal = std::dynamic_pointer_cast<Metal>(investment_ptr)))
+    else if (std::dynamic_pointer_cast<Metal>(investment_ptr))
         csv_style_info = "Metal" + csv_style_info;
-    else if ((cur = std::dynamic_pointer_cast<Currency>(investment_ptr)))
+    else if (std::dynamic_pointer_cast<Currency>(investment_ptr))
         csv_style_info = "Currency" + csv_style_info;
 
     return csv_style_info;
 }
 
 std::string
-get_table_style_info(const investment_ptr_t& investment_ptr, int n,
-                     bool with_price_change)
+get_table_style_info(const investment_ptr_t &investment_ptr, int n)
 {
     std::string inv_type = get_inv_type(investment_ptr);
 

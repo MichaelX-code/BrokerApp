@@ -14,7 +14,7 @@
 #include <random>
 #include <iomanip>
 #include <numeric>
-#include <stdio.h>
+#include <cstdio>
 #include <memory>
 
 #ifdef _WIN32
@@ -27,8 +27,6 @@
 #include "date.h"
 #include "list.hpp"
 #include "csv_parser.h"
-    
-#define DECIMAL 10
 
 typedef unsigned long inv_id_t;
 typedef long double   rubles;
@@ -51,7 +49,7 @@ void set_cursor_pos(int x, int y);
 
 std::pair<int, int> get_term_size();
 
-std::vector<std::string> parse_into_words(std::string s);
+std::vector<std::string> parse_into_words(const std::string& s);
 
 void set_tem_color_red();
 void set_tem_color_green();

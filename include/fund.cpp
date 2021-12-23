@@ -18,7 +18,7 @@ const noexcept
 }
 
 bool
-Fund::buy(investment_ptr_t investment_ptr, int n)
+Fund::buy(const investment_ptr_t& investment_ptr, int n)
 {
     if (!investment_ptr || (_budget < investment_ptr->get_price() * n))
         return false;
@@ -29,7 +29,7 @@ Fund::buy(investment_ptr_t investment_ptr, int n)
 }
 
 bool
-Fund::sell(investment_ptr_t investment_ptr, int n, double _tax_rate)
+Fund::sell(const investment_ptr_t& investment_ptr, int n, double _tax_rate)
 {
     auto inv_p = _owned.find(investment_ptr);
 

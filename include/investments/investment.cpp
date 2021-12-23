@@ -20,8 +20,7 @@ _name(name), _initial_price(price), _price(price), _profit(profit), _risk(risk)
 
 // Destructors:
 
-Investment::~Investment()
-{}
+Investment::~Investment() = default;
 
 inv_id_t
 Investment::get_id()
@@ -102,6 +101,7 @@ Investment::set_risk(double risk)
 
 bool
 Investment::operator == (const Investment& other)
+const
 {
     return (this->get_id() == other.get_id());
 }
@@ -113,7 +113,7 @@ Investment::operator != (const Investment& other)
 }
 
 investment_ptr_t
-find_by_id(investments_list_t invs, inv_id_t id)
+find_by_id(const investments_list_t& invs, inv_id_t id)
 {
     for (auto& inv : invs)
         if (inv->get_id() == id)

@@ -7,7 +7,7 @@ class csv_parser_t
 {
 public:
     // Constructors:
-    csv_parser_t(std::string file_path);
+    csv_parser_t(const std::string& file_path);
 
     // Destructors:
     ~csv_parser_t();
@@ -21,7 +21,7 @@ public:
 
     // Methods:
     std::vector<std::string> next_line();
-    void blame_last_line(std::string msg = "Invalid CSV line");
+    void blame_last_line(const std::string& msg = "Invalid CSV line");
 
 private:
     // Members:

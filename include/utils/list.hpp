@@ -78,10 +78,10 @@ private:
         node_t<T> * operator -> () const noexcept;
         operator bool () const;
 
-        List_iterator& operator ++ ();
-        List_iterator operator  ++ (int);
-        List_iterator& operator -- ();
-        List_iterator operator  -- (int);
+        virtual List_iterator& operator ++ ();
+        virtual List_iterator& operator -- ();
+        virtual const List_iterator operator  ++ (int);
+        virtual const List_iterator operator  -- (int);
 
         bool operator == (const List_iterator& other) const noexcept;
         bool operator != (const List_iterator& other) const noexcept;
@@ -95,9 +95,9 @@ private:
         using List_iterator::List_iterator;
 
         List_reverse_iterator& operator ++ ();
-        List_reverse_iterator operator  ++ (int);
         List_reverse_iterator& operator -- ();
-        List_reverse_iterator operator  -- (int);
+        const List_reverse_iterator operator  ++ (int);
+        const List_reverse_iterator operator  -- (int);
     };
 };
 

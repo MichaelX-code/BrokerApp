@@ -3,7 +3,7 @@
 // Default constructor sets current date (local)
 date_t::date_t()
 {
-    std::time_t cur_time = std::time(0);
+    std::time_t cur_time = std::time(NULL);
     std::tm* local_time = std::localtime(&cur_time);
 
     this->_day = local_time->tm_mday;
@@ -16,7 +16,7 @@ date_t::date_t()
 }
 
 // Construct out of string "dd?mm?yyyy"
-date_t::date_t(std::string date)
+date_t::date_t(const std::string& date)
 {
     if (date.length() != 10)
         throw std::invalid_argument("ERROR: Wrong date format");
@@ -131,6 +131,7 @@ operator != (const date_t &a, const date_t &b)
 
 inline bool
 date_t::_check_valid()
+const
 {
     return (_month <= 12 && _day <= _end_of_month(_month, _year));
 }

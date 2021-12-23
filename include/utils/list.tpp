@@ -1,11 +1,9 @@
 // Constructors:
 
 template<class T>
-list<T>::list()
-{
-    this->head = this->tail = nullptr;
-    this->sz = 0;
-}
+list<T>::list() :
+head(nullptr), tail(nullptr), sz(0)
+{}
 
 template<class T>
 list<T>::list(const list<T>& other) :
@@ -42,7 +40,7 @@ template<class T>
 void
 list<T>::push_front(const T& x)
 {
-    node_t<T>* new_element = new node_t<T>;
+    auto * new_element = new node_t<T>;
     new_element->data = x;
     new_element->next = nullptr;
 
@@ -65,7 +63,7 @@ template<class T>
 void
 list<T>::push_back(const T& x)
 {
-    node_t<T> * new_element = new node_t<T>;
+    auto * new_element = new node_t<T>;
     // FIXME: for now doesn't work with list< unique_ptr<...> >
     new_element->data = x;
     new_element->next = nullptr;
@@ -90,7 +88,7 @@ template<typename... ARGS>
 void
 list<T>::emplace_front(ARGS&&... args)
 {
-    node_t<T>* new_element = new node_t<T>;
+    auto * new_element = new node_t<T>;
     new_element->data = std::move(T(std::forward<ARGS>(args)...));
     new_element->next = nullptr;
 
@@ -114,7 +112,7 @@ template<typename... ARGS>
 void
 list<T>::emplace_back(ARGS&&... args)
 {
-    node_t<T>* new_element = new node_t<T>;
+    auto * new_element = new node_t<T>;
     new_element->data = std::move(T(std::forward<ARGS>(args)...));
     new_element->next = nullptr;
 
@@ -189,7 +187,7 @@ template<class T>
 void
 list<T>::insert_after(List_iterator it, const T& x)
 {
-    node_t<T>* new_element = new node_t<T>;
+    auto * new_element = new node_t<T>;
     new_element->data = x;
     if (it == this->tail)
     {
@@ -328,10 +326,13 @@ template<class T>
 list<T>&
 list<T>::operator = (const list<T>& other)
 {
-    this->clear();
-    for (node_t<T>* it = other.head; it; it = it->next)
-        this->push_back(it->data);
-    this->sz = other.size();
+    if (this != &other)
+    {
+        this->clear();
+        for (auto element : other)
+            this->push_back(element);
+        this->sz = other.size();
+    }
     return *this;
 }
 
@@ -435,7 +436,7 @@ list<T>::List_iterator::operator ++ ()
 }
 
 template<class T>
-typename list<T>::List_iterator
+const typename list<T>::List_iterator
 list<T>::List_iterator::operator ++ (int)
 {
     node_t<T>* tmp = ptr;
@@ -452,7 +453,7 @@ list<T>::List_iterator::operator -- ()
 }
 
 template<class T>
-typename list<T>::List_iterator
+const typename list<T>::List_iterator
 list<T>::List_iterator::operator -- (int)
 {
     node_t<T>* tmp = ptr;
@@ -487,7 +488,7 @@ list<T>::List_reverse_iterator::operator ++ ()
 }
 
 template<class T>
-typename list<T>::List_reverse_iterator
+const typename list<T>::List_reverse_iterator
 list<T>::List_reverse_iterator::operator ++ (int)
 {
     node_t<T>* tmp = this->ptr;
@@ -504,7 +505,7 @@ list<T>::List_reverse_iterator::operator -- ()
 }
 
 template<class T>
-typename list<T>::List_reverse_iterator
+const typename list<T>::List_reverse_iterator
 list<T>::List_reverse_iterator::operator -- (int)
 {
     node_t<T>* tmp = this->ptr;

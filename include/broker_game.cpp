@@ -4,7 +4,7 @@
 
 BrokerGame::BrokerGame(size_t game_end, rubles default_fund_budget) :
 _market(new Market()), _fund(new Fund(default_fund_budget)), _game_duration(0),
-_game_end(game_end), _status(PLAYING), _tui_mode(_pick_tui_mode())
+_game_end(game_end), _status(game_status::PLAYING)
 {}
 
 // Destructor:
@@ -41,19 +41,13 @@ BrokerGame::step()
     ++_game_duration;
 
     if (_game_duration == _game_end)
-        _status = ENDED;
+        _status = game_status::ENDED;
 }
 
 BrokerGame::operator bool()
 const
 {
-    return (_status == PLAYING);
-}
-
-tui_mode_t
-BrokerGame::_pick_tui_mode()
-{
-    return (get_term_size().first < 100 ? SINGLE_COLUMN : TWO_COLUMNS);
+    return (_status == game_status::PLAYING);
 }
 
 void
@@ -66,66 +60,6 @@ BrokerGame::_draw_available()
         std::cout << get_table_style_info(investment) << '\n';
 
     _cursor_pos.second = 3 + _market->get_available().size();
-}
-
-void
-BrokerGame::_draw_single_column_owned()
-{
-    _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
-    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
-
-    if (_fund->get_owned().size() == 0)
-    {
-        std::cout << "\nФонд не владеет никакими инвестициями\n";
-        _cursor_pos.second += 2;
-        return;
-    }
-
-    std::cout << "\n           Инвестиции фонда:\n";
-    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
-              << '\n';
-    std::cout << std::string(3,  '-') << '+' << get_table_divider()
-              << '\n';
-
-    for (auto& inv : _fund->get_owned())
-        std::cout << get_table_style_info(inv.first, inv.second) << '\n';
-
-    _cursor_pos.second += 4 + _fund->get_owned().size();
-}
-
-void
-BrokerGame::_draw_two_columns_owned()
-{
-    int cur_cursor_row = 0;
-    int second_col = 49;
-
-    _clear_second_column(second_col);
-
-    set_cursor_pos(second_col, cur_cursor_row++);
-
-    if (_fund->get_owned().size() == 0)
-    {
-        std::cout << "        Фонд не владеет никакими инвестициями\n";
-        set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
-        return;
-    }
-
-    std::cout << "                   Инвестиции фонда:\n";
-    set_cursor_pos(second_col, cur_cursor_row++);
-    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
-              << '\n';
-    set_cursor_pos(second_col, cur_cursor_row++);
-    std::cout << std::string(3,  '-') << '+' << get_table_divider()
-              << '\n';
-
-    set_cursor_pos(second_col, cur_cursor_row++);
-    for (auto& inv : _fund->get_owned())
-    {
-        std::cout << get_table_style_info(inv.first, inv.second) << '\n';
-        set_cursor_pos(second_col, cur_cursor_row++);
-    }
-    _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
-    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 }
 
 void
@@ -149,10 +83,41 @@ BrokerGame::_clear_second_column(int second_col)
 void
 BrokerGame::_draw_owned()
 {
-    if (_tui_mode == SINGLE_COLUMN)
-        _draw_single_column_owned();
-    else
-        _draw_two_columns_owned();
+    int cur_cursor_row = 0;
+    int second_col = 49;
+    _clear_second_column(second_col);
+    set_cursor_pos(second_col, cur_cursor_row++);
+
+    auto fix_cursor_pos = [](std::pair<int, int>& _cursor_pos,
+                             Market * _market)
+    {
+        _cursor_pos = std::make_pair(0, 3 + _market->get_available().size());
+        set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+    };
+
+    if (_fund->get_owned().size() == 0)
+    {
+        std::cout << "        Фонд не владеет никакими инвестициями\n";
+        fix_cursor_pos(_cursor_pos, _market);
+        return;
+    }
+
+    std::cout << "                   Инвестиции фонда:\n";
+    set_cursor_pos(second_col, cur_cursor_row++);
+    std::cout << std::left << std::setw(3)  << "n" << '|' << get_table_header()
+              << '\n';
+    set_cursor_pos(second_col, cur_cursor_row++);
+    std::cout << std::string(3,  '-') << '+' << get_table_divider()
+              << '\n';
+
+    set_cursor_pos(second_col, cur_cursor_row++);
+    for (auto& inv : _fund->get_owned())
+    {
+        std::cout << get_table_style_info(inv.first, inv.second) << '\n';
+        set_cursor_pos(second_col, cur_cursor_row++);
+    }
+
+    fix_cursor_pos(_cursor_pos, _market);
 }
 
 void
@@ -306,7 +271,7 @@ BrokerGame::command()
         }
         else if (cmd_sz == 1 && cmd_split[0] == "quit")
         {
-            _status = ENDED;
+            _status = game_status::ENDED;
             clear_terminal();
             return;
         }

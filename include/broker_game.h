@@ -5,11 +5,6 @@
 #include "fund.h"
 #include "utils/utils.h"
 
-enum tui_mode_t {
-    SINGLE_COLUMN,
-    TWO_COLUMNS
-};
-
 class BrokerGame
 {
 public:
@@ -38,13 +33,10 @@ private:
     size_t _game_duration;
     size_t _game_end;
     pos_t _cursor_pos = std::make_pair(0, 0);
-    game_status_t _status;
-    tui_mode_t _tui_mode;
+    game_status _status;
     double _tax_rate = 0.17;
 
     // Private functions:
-    tui_mode_t _pick_tui_mode();
-
     void _draw_available();
     void _draw_owned();
     void _draw_single_column_owned();

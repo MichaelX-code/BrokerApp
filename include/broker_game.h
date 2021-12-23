@@ -48,7 +48,7 @@ private:
 
     void _handle_cmd_buy(const std::vector<std::string>& cmd);
     void _handle_cmd_sell(const std::vector<std::string>& cmd);
-
+    void _handle_cmd_add(const std::vector<std::string>& cmd);
     void after_cmd_msg(std::string msg, void color());
 };
 

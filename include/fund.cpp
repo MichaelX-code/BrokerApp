@@ -51,6 +51,13 @@ Fund::sell(investment_ptr_t investment_ptr, int n, double _tax_rate)
     return true;
 }
 
+void
+Fund::add_to_budget(rubles amount)
+{
+    _budget += amount;
+    _initial_budget += amount;
+}
+
 rubles
 Fund::calc_earnings()
 const

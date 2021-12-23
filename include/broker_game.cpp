@@ -178,6 +178,9 @@ void
 BrokerGame::_draw_console()
 {
     set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
+    for (int i = 0; i < 3; ++i)
+        std::cout << std::string(get_term_size().first, ' ') << '\n';
+    set_cursor_pos(_cursor_pos.first, _cursor_pos.second);
 
     std::cout << "\nВведите команду (\"help\" для просмотра всех команд):\n";
     std::cout << "> ";
@@ -204,6 +207,7 @@ BrokerGame::_draw_help()
         { "stats", "Открыть страницу с полной статистикой" },
         { "buy [id] [n]", "Купить n инвестиций определенного id" },
         { "sell [id] [n]", "Продать n инвестиций определенного id" },
+        { "add [amount]", "Добавить в фонд amount рублей" },
         { "end", "Закончить игру сейчас" }
     };
 
@@ -316,9 +320,13 @@ BrokerGame::command()
         {
             _handle_cmd_buy(cmd_split);
         }
-        else if (cmd_sz == 3 && cmd_split[0] == "sell")
+        else if (cmd_sz >= 1 && cmd_split[0] == "sell")
         {
             _handle_cmd_sell(cmd_split);
+        }
+        else if (cmd_sz >= 1 && cmd_split[0] == "add")
+        {
+            _handle_cmd_add(cmd_split);
         }
         else
         {
@@ -404,6 +412,35 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
     else
         after_cmd_msg("  Ошибка: Фонд не владеет таким количеством акций!",       
                       set_tem_color_red);
+
+    _draw_owned();
+    _draw_quick_stats();
+    _draw_console();
+}
+
+void
+BrokerGame::_handle_cmd_add(const std::vector<std::string>& cmd)
+{
+    if (cmd.size() != 2)
+    {
+        after_cmd_msg("  Использование: add [amount]", set_tem_color_red);
+        return;
+    }
+
+    rubles amount;
+    if (!parse<rubles>(cmd[1], amount))
+    {
+        after_cmd_msg("  Ошибка: Неверная сумма", set_tem_color_red);
+        return;
+    }
+
+    if (amount <= 0)
+    {
+        after_cmd_msg("  Ошибка: счёт можно пополнить только на положительную сумму", set_tem_color_red);
+        return;
+    }
+
+    _fund->add_to_budget(amount);
 
     _draw_owned();
     _draw_quick_stats();

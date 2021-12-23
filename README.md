@@ -9,7 +9,7 @@ GitHub repo: <https://github.com/MichaelX-code/BrokerApp>
 
 > IT IS HIGHLY RECOMMENDED TO RUN WITH TERMINAL WIDTH AT LEAST 100 CHARACTERS
 
-![img](https://user-images.githubusercontent.com/59616661/146963590-e25ab2d2-c25f-4c29-9c70-2318a0f13a36.png)
+![Screenshot](https://user-images.githubusercontent.com/59616661/146963590-e25ab2d2-c25f-4c29-9c70-2318a0f13a36.png)
 
 ## Project structure
 
@@ -86,6 +86,7 @@ Utility classes:
 ## To-do
 
 - [x] Implement welcome screen
+- [x] Implement ability to add money to the fund during the game
 - [ ] Improve full statistic page: display earnings from each category
 - [ ] Implement end screen
 

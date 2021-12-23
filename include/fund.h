@@ -16,6 +16,7 @@ public:
     // Methods:
     bool buy(investment_ptr_t investment_ptr, int n);
     bool sell(investment_ptr_t investment_ptr, int n, double tax_rate);
+    void add_to_budget(rubles amount);
     rubles calc_earnings() const;
 private:
     fund_investments_t _owned;

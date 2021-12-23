@@ -1,5 +1,13 @@
 #include "utils.h"
 
+void
+fix_term_encoding()
+{
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+}
+
 inv_id_t
 iota()
 {

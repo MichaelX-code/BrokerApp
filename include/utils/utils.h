@@ -18,10 +18,10 @@
 #include <memory>
 
 #ifdef _WIN32
-    #include <Windows.h>
+#   include <Windows.h>
 #else
-    #include <sys/ioctl.h>
-    #include <unistd.h>
+#   include <sys/ioctl.h>
+#   include <unistd.h>
 #endif
 
 #include "date.h"
@@ -38,6 +38,8 @@ enum game_status_t {
     PLAYING,
     ENDED,
 };
+
+void fix_term_encoding();
 
 inv_id_t iota();
 

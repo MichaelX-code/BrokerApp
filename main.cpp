@@ -3,6 +3,8 @@
 int
 main(void)
 {
+    fix_term_encoding();
+
     size_t game_duration_in_months = 24;
     rubles starting_fund_budget    = 500000;
 

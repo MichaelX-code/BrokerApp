@@ -328,7 +328,7 @@ BrokerGame::command()
         }
         else
         {
-            after_cmd_msg("Неизвестная команда!", set_tem_color_red);
+            after_cmd_msg("  Неизвестная команда!", set_tem_color_red);
         }
     }
 }
@@ -338,21 +338,21 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
 {
     if (cmd.size() != 3)
     {
-        after_cmd_msg("Использование: buy [id] [n]", set_tem_color_red);
+        after_cmd_msg("  Использование: buy [id] [n]", set_tem_color_red);
         return;
     }
 
     inv_id_t id_to_buy;
     if (!parse<inv_id_t>(cmd[1], id_to_buy))
     {
-        after_cmd_msg("Ошибка: Неверный id", set_tem_color_red);
+        after_cmd_msg("  Ошибка: Неверный id", set_tem_color_red);
         return;
     }
 
     int n_to_buy;
     if (!parse<int>(cmd[2], n_to_buy))
     {
-        after_cmd_msg("Ошибка: Неверное количество для покупки", 
+        after_cmd_msg("  Ошибка: Неверное количество для покупки", 
                       set_tem_color_red);
         return;
     }
@@ -362,15 +362,15 @@ BrokerGame::_handle_cmd_buy(const std::vector<std::string>& cmd)
 
     if (n_to_buy + _fund->get_owned()[inv_to_buy] >= 1000)
     {
-        after_cmd_msg("Ошибка: Максимаольное количество лотов во владении 999", 
+        after_cmd_msg("  Ошибка: Максимаольное количество лотов во владении 999", 
                       set_tem_color_red);
         return;
     }
 
     if (_fund->buy(inv_to_buy, n_to_buy))
-        after_cmd_msg("Успешная покупка!", set_tem_color_green);
+        after_cmd_msg("  Успешная покупка!", set_tem_color_green);
     else
-        after_cmd_msg("Ошибка: Невозможно совершить покупку!",
+        after_cmd_msg("  Ошибка: Невозможно совершить покупку!",
                        set_tem_color_red);
 
     _draw_owned();
@@ -383,21 +383,21 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
 {
     if (cmd.size() != 3)
     {
-        after_cmd_msg("Использование: sell [id] [n]", set_tem_color_red);
+        after_cmd_msg("  Использование: sell [id] [n]", set_tem_color_red);
         return;
     }
 
     inv_id_t id_to_sell;
     if (!parse<inv_id_t>(cmd[1], id_to_sell))
     {
-        after_cmd_msg("Ошибка: Неверный id", set_tem_color_red);
+        after_cmd_msg("  Ошибка: Неверный id", set_tem_color_red);
         return;
     }
 
     int n_to_sell;
     if (!parse<int>(cmd[2], n_to_sell))
     {
-        after_cmd_msg("Ошибка: Неверное количество для продажи", 
+        after_cmd_msg("  Ошибка: Неверное количество для продажи", 
                       set_tem_color_red);
         return;
     }
@@ -406,9 +406,9 @@ BrokerGame::_handle_cmd_sell(const std::vector<std::string>& cmd)
                                               id_to_sell);
 
     if (_fund->sell(inv_to_sell, n_to_sell, _tax_rate))
-        after_cmd_msg("Успешная продажа!", set_tem_color_green);
+        after_cmd_msg("  Успешная продажа!", set_tem_color_green);
     else
-        after_cmd_msg("Ошибка: Фонд не владеет таким количеством акций!",       
+        after_cmd_msg("  Ошибка: Фонд не владеет таким количеством акций!",       
                       set_tem_color_red);
 
     _draw_owned();

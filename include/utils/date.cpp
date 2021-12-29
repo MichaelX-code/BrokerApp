@@ -6,7 +6,7 @@ date_t::date_t()
     std::time_t cur_time = std::time(NULL);
     std::tm* local_time = std::localtime(&cur_time);
 
-    this->_day = local_time->tm_mday;
+    this->_day = 1;
     this->_month = local_time->tm_mon + 1;
     this->_year = local_time->tm_year + 1900;
 
